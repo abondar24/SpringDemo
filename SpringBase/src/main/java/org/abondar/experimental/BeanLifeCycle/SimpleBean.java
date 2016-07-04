@@ -1,5 +1,8 @@
-package org.abondar.experimental.HelloWorld;
+package org.abondar.experimental.BeanLifeCycle;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 
@@ -7,6 +10,7 @@ import javax.annotation.PostConstruct;
  * Created by abondar on 03.07.16.
  */
 public class SimpleBean {
+    private static Logger logger = LoggerFactory.getLogger(SimpleDestuctiveBean.class);
     private static final String DEFAULT_NAME = "James Bond";
     private String name;
     private int age = Integer.MIN_VALUE;
@@ -23,10 +27,10 @@ public class SimpleBean {
     //init callback method
     @PostConstruct
     public void init() {
-        System.out.println("Initializing bean");
+        logger.info("Initializing simple bean");
 
         if (name == null) {
-            System.out.println("Using default name");
+            logger.info("Using default name");
             name = DEFAULT_NAME;
         }
 
