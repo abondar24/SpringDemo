@@ -1,8 +1,10 @@
 package org.abondar.experimental.FactoryBean;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 
 import java.security.MessageDigest;
@@ -13,8 +15,11 @@ import java.security.MessageDigest;
  */
 
 @Configuration
+@PropertySource(value = "classpath:factoryBean.properties")
 public class FactoryBeanConfiguration {
 
+    @Value("${algortithm}")
+    private String nonDefAlg;
 
     @Bean
     MessageDigestFactoryBean messageDigestFactoryBean() throws Exception{
@@ -29,7 +34,7 @@ public class FactoryBeanConfiguration {
     @Bean
     MessageDigest shaDigest() throws Exception{
         MessageDigestFactoryBean factoryBean = messageDigestFactoryBean();
-         factoryBean.setAlgorithmName("SHA1");
+         factoryBean.setAlgorithmName(nonDefAlg);
         return factoryBean.getObject();
     }
 

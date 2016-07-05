@@ -17,7 +17,6 @@ public class HelloWorldRun {
     public static void main(String[] args) {
 
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-
         ctx.register(HelloWorldConfiguration.class);
         ctx.refresh();
 
@@ -30,8 +29,6 @@ public class HelloWorldRun {
 
         MessageProvider mp1 = ctx.getBean("messageProviderConf", MessageProvider.class);
         logger.info(mp1.getMessage());
-
-
     }
 
 }

@@ -1,17 +1,21 @@
 package org.abondar.experimental.HelloWorld;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 
 
 /**
  * Created by abondar on 03.07.16.
  */
 
+@PropertySource(value = "classpath:helloWorld.properties")
+@ComponentScan(basePackages = {"org.abondar.experimental"})
 @Configuration
 public class HelloWorldConfiguration {
 
-
+    @Autowired
+    Environment env;
 
     @Bean
     public MessageRenderer messageRenderer() {
@@ -25,7 +29,8 @@ public class HelloWorldConfiguration {
 
     @Bean
     public MessageProvider messageProviderConf() {
-        return new ConfigurableMessageProvider("Message");
+        System.out.println(env.getProperty("msg"));
+        return new ConfigurableMessageProvider(env.getProperty("msg"));
     }
 
 }

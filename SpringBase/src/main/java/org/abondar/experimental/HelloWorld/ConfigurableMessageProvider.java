@@ -21,5 +21,7 @@ public class ConfigurableMessageProvider implements MessageProvider{
         return message;
     }
 
-
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

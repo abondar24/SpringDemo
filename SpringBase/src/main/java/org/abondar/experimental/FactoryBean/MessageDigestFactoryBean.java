@@ -1,6 +1,7 @@
 package org.abondar.experimental.FactoryBean;
 
 import org.springframework.beans.factory.FactoryBean;
+import org.springframework.beans.factory.annotation.Value;
 
 
 import javax.annotation.PostConstruct;
@@ -12,7 +13,8 @@ import java.security.MessageDigest;
 public class MessageDigestFactoryBean implements FactoryBean<MessageDigest> {
 
 
-    private String algorithmName = "MD5";
+    @Value("${defAlgorithm}")
+    private String algorithmName;
 
     private MessageDigest messageDigest = null;
 
@@ -38,6 +40,6 @@ public class MessageDigestFactoryBean implements FactoryBean<MessageDigest> {
     }
 
     public void setAlgorithmName(String algorithmName) {
-        this.algorithmName = algorithmName;
+    this.algorithmName = algorithmName;
     }
 }
