@@ -1,7 +1,7 @@
 package org.abondar.experimental.jdbc;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 /**
