@@ -44,11 +44,6 @@ public class ContactTelDetail {
 
     @Override
     public String toString() {
-        return "ContactTelDetail{" +
-                "id=" + id +
-                ", contactId=" + contactId +
-                ", telType='" + telType + '\'' +
-                ", telNumber='" + telNumber + '\'' +
-                '}';
+        return  telType + ' ' +  telNumber;
     }
 }
