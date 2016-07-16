@@ -14,6 +14,7 @@
     <modules>
         <module>SpringBase</module>
         <module>SpringDataBase</module>
+        <module>SpringAOP</module>
     </modules>
 
     <properties>
