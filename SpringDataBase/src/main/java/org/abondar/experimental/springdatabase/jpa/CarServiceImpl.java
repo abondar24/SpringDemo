@@ -6,6 +6,7 @@ import org.joda.time.Years;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
+    @Scheduled(cron="0 2 * * * *") //for running in task module
     public void updateCarAgeJob() {
       List<Car> cars = findAll();
         DateTime curTime = DateTime.now();
