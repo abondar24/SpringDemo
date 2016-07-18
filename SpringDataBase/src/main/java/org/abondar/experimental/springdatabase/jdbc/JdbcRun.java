@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * Created by abondar on 07.07.16.
  */
-public class SpringJdbcRun {
+public class JdbcRun {
 
-    private static Logger logger = LoggerFactory.getLogger(SpringJdbcRun.class);
+    private static Logger logger = LoggerFactory.getLogger(JdbcRun.class);
 
     private static ContactDao contactDao;
     public static void main(String[] args) {
