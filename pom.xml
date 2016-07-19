@@ -17,7 +17,7 @@
         <module>SpringAOP</module>
         <module>SpringTasks</module>
         <module>SpringHTTPInvoker</module>
-        <!--<module>SpringRest</module>-->
+        <module>SpringRest</module>
     </modules>
 
     <properties>
