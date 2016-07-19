@@ -26,7 +26,7 @@ public class JdbcConfiguration {
     private String password;
 
     @Bean
-    DriverManagerDataSource dataSource() {
+    public DriverManagerDataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
         dataSource.setDriverClassName(driverClassName);
@@ -37,7 +37,7 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    ContactDao contactDao(){
+    public ContactDao contactDao(){
         return new ContactDAOImpl();
     }
 

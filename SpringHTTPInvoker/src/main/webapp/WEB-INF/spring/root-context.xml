@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean name="/JDBCConfiguration" class="org.abondar.experimental.springdatabase.jdbc.JdbcConfiguration" />
+    <context:component-scan base-package="org.abondar.experimental.httpinvoke" />
+    <bean name="contactExporter" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="contactDao" />
+        <property name="serviceInterface"
+              value="org.abondar.experimental.springdatabase.jdbc.ContactDao" />
+</bean>
+</beans>

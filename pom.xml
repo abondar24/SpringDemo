@@ -16,6 +16,8 @@
         <module>SpringDataBase</module>
         <module>SpringAOP</module>
         <module>SpringTasks</module>
+        <module>SpringHTTPInvoker</module>
+        <!--<module>SpringRest</module>-->
     </modules>
 
     <properties>
