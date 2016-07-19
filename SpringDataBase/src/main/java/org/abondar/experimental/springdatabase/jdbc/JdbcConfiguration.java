@@ -37,7 +37,7 @@ public class JdbcConfiguration {
     }
 
     @Bean
-    public ContactDao contactDao(){
+    public static ContactDao contactDao(){
         return new ContactDAOImpl();
     }
 

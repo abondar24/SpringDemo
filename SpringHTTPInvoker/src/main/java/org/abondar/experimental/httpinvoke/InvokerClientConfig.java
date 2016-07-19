@@ -9,13 +9,13 @@ import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
  * Created by abondar on 19.07.16.
  */
 @Configuration
-public class InvokerConfig {
+public class InvokerClientConfig {
 
     @Bean
     HttpInvokerProxyFactoryBean remoteContactService(){
         HttpInvokerProxyFactoryBean remoteContactService = new HttpInvokerProxyFactoryBean();
         //need to set the right link
-        remoteContactService.setServiceUrl("http://localhost:8080/httpinvoke/remoting/ContactService");
+        remoteContactService.setServiceUrl("http://localhost:8080/SpringHTTPInvoker/remoting/ContactService");
         remoteContactService.setServiceInterface(ContactDao.class);
         return remoteContactService;
     }

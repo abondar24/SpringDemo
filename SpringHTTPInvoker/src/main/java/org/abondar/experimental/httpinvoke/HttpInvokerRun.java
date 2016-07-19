@@ -5,7 +5,6 @@ import org.abondar.experimental.springdatabase.jdbc.ContactDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class HttpInvokerRun {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-        ctx.register(InvokerConfig.class);
+        ctx.register(InvokerClientConfig.class);
         ctx.refresh();
 
         ContactDao contactDao = ctx.getBean(ContactDao.class);
