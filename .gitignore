@@ -24,7 +24,6 @@ SpringBase/src/test/
 SpringBase/target/
 SpringDataBase/src/test/
 SpringDataBase/target/
-SpringHTTPInvoker/src/main/resources/
 SpringHTTPInvoker/src/test/
 SpringHTTPInvoker/target/SpringRemoting-1.0-SNAPSHOT/WEB-INF/classes/org/
 SpringHTTPInvoker/target/SpringRemoting-1.0-SNAPSHOT/WEB-INF/spring/
@@ -37,6 +36,5 @@ SpringTasks/src/test/
 SpringTasks/target/
 SpringHTTPInvoker/target/SpringHTTPInvoker-1.0-SNAPSHOT/
 SpringHTTPInvoker/target/classes/logback.xml
-SpringJMX/src/
 SpringJMX/target/
 SpringRest/target/
