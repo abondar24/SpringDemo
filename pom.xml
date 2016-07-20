@@ -18,6 +18,7 @@
         <module>SpringTasks</module>
         <module>SpringHTTPInvoker</module>
         <module>SpringRest</module>
+        <module>SpringJMX</module>
     </modules>
 
     <properties>

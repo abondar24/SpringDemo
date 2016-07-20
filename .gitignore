@@ -35,3 +35,8 @@ SpringRest/src/test/
 SpringTasks/src/main/resources/
 SpringTasks/src/test/
 SpringTasks/target/
+SpringHTTPInvoker/target/SpringHTTPInvoker-1.0-SNAPSHOT/
+SpringHTTPInvoker/target/classes/logback.xml
+SpringJMX/src/
+SpringJMX/target/
+SpringRest/target/
