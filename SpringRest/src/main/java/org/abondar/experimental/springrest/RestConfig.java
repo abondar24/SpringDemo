@@ -3,8 +3,6 @@ package org.abondar.experimental.springrest;
 import org.abondar.experimental.springdatabase.jpa.JPAConfig;
 import org.abondar.experimental.springrest.jmx.AppStats;
 import org.abondar.experimental.springrest.jmx.AppStatsImpl;
-import org.hibernate.jmx.StatisticsService;
-import org.hibernate.stat.Statistics;
 import org.springframework.context.annotation.*;
 import org.springframework.jmx.export.MBeanExporter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -37,7 +35,7 @@ public class RestConfig extends WebMvcConfigurerAdapter{
     public HashMap<String,Object> apps(){
         HashMap<String,Object> apps = new HashMap<>();
         apps.put("SpringRestDemo",appStats());
-        return apps();
+        return apps;
     }
 
 
