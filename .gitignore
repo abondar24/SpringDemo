@@ -36,5 +36,13 @@ SpringTasks/src/test/
 SpringTasks/target/
 SpringHTTPInvoker/target/SpringHTTPInvoker-1.0-SNAPSHOT/
 SpringHTTPInvoker/target/classes/logback.xml
-SpringJMX/target/
 SpringRest/target/
+SpringMVC/src/test/
+SpringMVC/target/SpringMVC-1.0-SNAPSHOT/
+SpringMVC/target/classes/data.sql
+SpringMVC/target/classes/db.properties
+SpringMVC/target/classes/logback.xml
+SpringMVC/target/classes/org/
+SpringMVC/target/generated-sources/
+SpringMVC/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+SpringMVC/target/surefire/
