@@ -19,6 +19,8 @@ import java.util.HashMap;
 @Import(JPAConfig.class)
 public class RestConfig extends WebMvcConfigurerAdapter{
 
+    //jmx requires some hibernate shit which I don't understand where to take
+    // commnent these beans to make rest demo operational
     @Bean
     public AppStats appStats() {
         return new AppStatsImpl();
