@@ -20,6 +20,7 @@
         <module>SpringRest</module>
         <module>SpringMVC</module>
         <module>SpringWS</module>
+        <module>SpringBatch</module>
     </modules>
 
     <properties>

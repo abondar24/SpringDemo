@@ -8,7 +8,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 public class WebSocketInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{WebSocketConfig.class};
+        return new Class[]{WebSocketConfig.class,WebSocketStompConfig.class};
     }
 
     @Override

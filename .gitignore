@@ -48,3 +48,5 @@ SpringMVC/target/maven-status/maven-compiler-plugin/compile/default-compile/crea
 SpringMVC/target/surefire/
 SpringWS/src/test/
 SpringWS/target/
+SpringBatch/src/test/
+SpringBatch/lib
