@@ -46,3 +46,5 @@ SpringMVC/target/classes/org/
 SpringMVC/target/generated-sources/
 SpringMVC/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
 SpringMVC/target/surefire/
+SpringWS/src/test/
+SpringWS/target/

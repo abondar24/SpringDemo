@@ -19,6 +19,7 @@
         <module>SpringHTTPInvoker</module>
         <module>SpringRest</module>
         <module>SpringMVC</module>
+        <module>SpringWS</module>
     </modules>
 
     <properties>
