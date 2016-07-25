@@ -21,6 +21,7 @@
         <module>SpringMVC</module>
         <module>SpringWS</module>
         <module>SpringBatch</module>
+        <module>SpringBoot</module>
     </modules>
 
     <properties>

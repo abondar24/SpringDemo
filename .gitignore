@@ -51,3 +51,6 @@ SpringWS/target/
 SpringBatch/src/test/
 SpringBatch/lib
 SpringBatch/target/
+SpringBoot/src/main/resources/
+SpringBoot/src/test/
+SpringBoot/target/
