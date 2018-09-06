@@ -1,4 +1,6 @@
 # SpringDemo
 Big Spring4 demo.
 
-Spring app for showing most of the spring features.
+Set of spring related demos.
+
+- [SpringReactive](SpringReactive/README.md)

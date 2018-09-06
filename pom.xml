@@ -22,6 +22,7 @@
         <module>SpringWS</module>
         <module>SpringBatch</module>
         <module>SpringBoot</module>
+        <module>SpringReactive</module>
     </modules>
 
     <properties>
