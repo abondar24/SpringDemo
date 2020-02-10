@@ -1,0 +1,8 @@
+query getDepartments{
+    getDepartments(count:2,offset:0){
+        name,
+        employees{
+            id
+        }
+    }
+}

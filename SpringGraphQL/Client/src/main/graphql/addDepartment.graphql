@@ -1,0 +1,6 @@
+mutation addDepartment {
+    addDepartment(name:"Experimental development"){
+        id
+        name
+    }
+}

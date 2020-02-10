@@ -1,0 +1,8 @@
+mutation addEmployee {
+  addEmployee(firstName: "Alex", lastName:"Bondar", phone: "+7923221213"){
+    id
+    firstName
+    lastName
+    phone
+  }
+}

@@ -1,0 +1,30 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Employee {
+    id: ID!
+    firstName: String!
+    lastName: String!
+    phone: String
+    department: Department!
+}
+
+type Department{
+    id: ID!
+    name: String!
+    employees: [Employee]!
+}
+
+type Query {
+    getEmployees(count: Int, offset: Int): [Employee]!
+    getDepartments(count: Int, offset: Int): [Department]!
+    getEmployeesInDepartment(depId: Int,count: Int, offset: Int) :[Employee]!
+}
+
+type Mutation {
+    addEmployee(firstName: String!,lastName: String!,phone: String): Employee!
+    addDepartment(name: String): Department!
+    addEmployeeToDepartment(empId: Int!,depId: Int!): Boolean
+}
