@@ -1,7 +1,7 @@
 package org.abondar.experimental.httpinvoke;
 
-import org.abondar.experimental.springdatabase.jdbc.Contact;
-import org.abondar.experimental.springdatabase.jdbc.ContactDao;
+import org.abondar.experimental.springdata.jdbc.Contact;
+import org.abondar.experimental.springdata.jdbc.ContactDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

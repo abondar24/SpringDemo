@@ -1,6 +1,6 @@
 package org.abondar.experimental.httpinvoke;
 
-import org.abondar.experimental.springdatabase.jdbc.ContactDao;
+import org.abondar.experimental.springdata.jdbc.ContactDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;

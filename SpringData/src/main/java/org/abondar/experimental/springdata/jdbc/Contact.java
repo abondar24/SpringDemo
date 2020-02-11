@@ -1,4 +1,4 @@
-package org.abondar.experimental.springdatabase.jdbc;
+package org.abondar.experimental.springdata.jdbc;
 
 import java.io.Serializable;
 import java.sql.Date;

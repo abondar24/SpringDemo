@@ -1,4 +1,4 @@
-package org.abondar.experimental.springdatabase.jdbc;
+package org.abondar.experimental.springdata.jdbc;
 
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.BatchSqlUpdate;

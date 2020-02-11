@@ -1,4 +1,4 @@
-package org.abondar.experimental.springdatabase.jpa;
+package org.abondar.experimental.springdata.jpa.car;
 
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;

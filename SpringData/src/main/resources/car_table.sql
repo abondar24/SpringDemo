@@ -16,3 +16,7 @@ INSERT INTO CAR (LICENCE_PLATE, MANUFACTURER, MANUFACTURER_DATE) VALUES ('LICENS
                                                                         '1992-12-30');
 INSERT INTO CAR (LICENCE_PLATE, MANUFACTURER, MANUFACTURER_DATE) VALUES ('LICENSE-1003', 'BMW',
                                                                         '2003-1-6');
+INSERT INTO CAR (LICENCE_PLATE, MANUFACTURER, MANUFACTURER_DATE) VALUES ('LICENSE-1005', 'BMW',
+                                                                         '2009-1-6');
+INSERT INTO CAR (LICENCE_PLATE, MANUFACTURER, MANUFACTURER_DATE) VALUES ('LICENSE-2005', 'BMW',
+                                                                         '2009-1-3');

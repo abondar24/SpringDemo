@@ -1,4 +1,4 @@
-package org.abondar.experimental.springdatabase.jdbc;
+package org.abondar.experimental.springdata.jdbc;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

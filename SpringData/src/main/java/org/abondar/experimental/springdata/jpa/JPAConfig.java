@@ -1,4 +1,4 @@
-package org.abondar.experimental.springdatabase.jpa;
+package org.abondar.experimental.springdata.jpa;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +27,7 @@ import java.util.Properties;
 @PropertySource("classpath:jpa.properties")
 @EnableJpaRepositories
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"org.abondar.experimental.springdatabase.jpa"})
+@ComponentScan(basePackages = {"org.abondar.experimental.springdata.jpa"})
 public class JPAConfig {
 
     @Value("${hibernate.max_fetch_depth}")
@@ -56,11 +56,10 @@ public class JPAConfig {
     @Bean
     public DataSource dataSource() {
         EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        EmbeddedDatabase db = builder
+        return builder
                 .setType(EmbeddedDatabaseType.H2)
                 .addScript("classpath:car_table.sql")
                 .build();
-        return db;
     }
 
     @Bean
@@ -76,7 +75,7 @@ public class JPAConfig {
 
         em.setDataSource(dataSource());
         em.setJpaVendorAdapter(jpaVendorAdapter());
-        em.setPackagesToScan("org.abondar.experimental.springdatabase.jpa");
+        em.setPackagesToScan("org.abondar.experimental.springdata.jpa");
         em.setJpaProperties(properties());
         em.afterPropertiesSet();
         return em.getNativeEntityManagerFactory();

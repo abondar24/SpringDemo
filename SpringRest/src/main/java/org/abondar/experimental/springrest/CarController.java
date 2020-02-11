@@ -1,7 +1,7 @@
 package org.abondar.experimental.springrest;
 
-import org.abondar.experimental.springdatabase.jpa.Car;
-import org.abondar.experimental.springdatabase.jpa.CarService;
+import org.abondar.experimental.springdata.jpa.car.Car;
+import org.abondar.experimental.springdata.jpa.car.CarService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

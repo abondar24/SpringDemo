@@ -1,6 +1,6 @@
 package org.abondar.experimental.springrest;
 
-import org.abondar.experimental.springdatabase.jpa.JPAConfig;
+import org.abondar.experimental.springdata.jpa.JPAConfig;
 import org.abondar.experimental.springrest.jmx.AppStats;
 import org.abondar.experimental.springrest.jmx.AppStatsImpl;
 import org.springframework.context.annotation.*;

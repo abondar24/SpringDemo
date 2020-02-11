@@ -1,4 +1,4 @@
-package org.abondar.experimental.springdatabase.jpa;
+package org.abondar.experimental.springdata.jpa.car;
 
 import org.springframework.stereotype.Service;
 
@@ -14,4 +14,8 @@ public interface CarService {
     Car save(Car car);
 
     void updateCarAgeJob();
+
+    Car findByLicencePlate(String licencePlate);
+
+    List<Car> findByAge(int age,int offset,int limit);
 }

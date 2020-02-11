@@ -1,6 +1,6 @@
 package org.abondar.experimental.springrest.jmx;
 
-import org.abondar.experimental.springdatabase.jpa.CarService;
+import org.abondar.experimental.springdata.jpa.car.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

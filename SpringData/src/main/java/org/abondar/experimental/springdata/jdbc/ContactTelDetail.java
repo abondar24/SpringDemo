@@ -1,4 +1,4 @@
-package org.abondar.experimental.springdatabase.jdbc;
+package org.abondar.experimental.springdata.jdbc;
 
 /**
  * Created by abondar on 06.07.16.

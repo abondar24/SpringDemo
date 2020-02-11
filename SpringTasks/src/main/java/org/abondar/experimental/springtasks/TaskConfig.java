@@ -1,6 +1,6 @@
 package org.abondar.experimental.springtasks;
 
-import org.abondar.experimental.springdatabase.jpa.JPAConfig;
+import org.abondar.experimental.springdata.jpa.JPAConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
