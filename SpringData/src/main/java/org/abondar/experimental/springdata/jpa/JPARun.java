@@ -1,7 +1,5 @@
 package org.abondar.experimental.springdata.jpa;
 
-import org.abondar.experimental.springdata.jpa.car.Car;
-import org.abondar.experimental.springdata.jpa.car.CarService;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +36,7 @@ public class JPARun {
 
         System.out.println(carService.findByLicencePlate("LICENSE-1005"));
         System.out.println(carService.findByAge(10,0,5));
+        System.out.println(carService.findCarData(39,"LICENSE-1001"));
     }
 
     private static void showCarList(CarService carService){

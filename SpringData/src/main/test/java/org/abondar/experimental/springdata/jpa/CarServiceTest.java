@@ -1,18 +1,18 @@
 package org.abondar.experimental.springdata.jpa;
 
-import org.abondar.experimental.springdata.jpa.car.Car;
-import org.abondar.experimental.springdata.jpa.car.CarRepository;
-import org.abondar.experimental.springdata.jpa.car.CarService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,17 +27,11 @@ public class CarServiceTest {
     @Mock
     private CarRepository carRepository;
 
-    private CarService carService;
+    @InjectMocks
+    @Autowired
+    private CarServiceImpl carService;
 
-    @Before
-    public void setUp(){
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-        ctx.register(JPAConfig.class);
-        ctx.refresh();
 
-        carService = ctx.getBean("carService", CarService.class);
-
-    }
 
     @Test
     public void findByLicencePlate() {
@@ -46,5 +40,30 @@ public class CarServiceTest {
 
         Car car = carService.findByLicencePlate("test");
         assertEquals(0,car.getId());
+    }
+
+    @Test
+    public void findByAge(){
+        when(carRepository.findAllByAgeAfter(10, new PageRequest(0,3)))
+                .thenReturn( new PageImpl<>(Arrays.asList(new Car(), new Car(), new Car())));
+
+        List<Car> carList = carService.findByAge(10,0,3);
+        assertEquals(3,carList.size());
+    }
+
+    @Test
+    public void findCarData(){
+        Car co = new Car();
+        co.setAge(10);
+        co.setLicencePlate("test");
+
+        ProjectionFactory factory = new SpelAwareProxyProjectionFactory();
+        CarView car = factory.createProjection(CarView.class,co);
+
+        when(carRepository.findByAgeAndLicencePlate(10,"test"))
+                .thenReturn(car);
+
+        String res = carService.findCarData(10,"test");
+        assertEquals("10-test",res);
     }
 }

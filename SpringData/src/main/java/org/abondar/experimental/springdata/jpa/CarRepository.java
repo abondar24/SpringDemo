@@ -1,4 +1,4 @@
-package org.abondar.experimental.springdata.jpa.car;
+package org.abondar.experimental.springdata.jpa;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,4 +15,6 @@ public interface CarRepository extends CrudRepository<Car,Long>{
 
   Optional<Car> findByLicencePlate(String licencePlate);
   Page<Car> findAllByAgeAfter(int age, Pageable pageable);
+
+  CarView findByAgeAndLicencePlate(int age,String licencePlate);
 }

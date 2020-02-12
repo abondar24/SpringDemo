@@ -10,8 +10,8 @@ CREATE TABLE CAR (
 );
 
 
-INSERT INTO CAR (LICENCE_PLATE, MANUFACTURER, MANUFACTURER_DATE) VALUES ('LICENSE-1001', 'Ford',
-                                                                        '1980-07-30');
+INSERT INTO CAR (LICENCE_PLATE, MANUFACTURER, MANUFACTURER_DATE,AGE) VALUES ('LICENSE-1001', 'Ford',
+                                                                        '1980-07-30',40);
 INSERT INTO CAR (LICENCE_PLATE, MANUFACTURER, MANUFACTURER_DATE) VALUES ('LICENSE-1002', 'Toyota',
                                                                         '1992-12-30');
 INSERT INTO CAR (LICENCE_PLATE, MANUFACTURER, MANUFACTURER_DATE) VALUES ('LICENSE-1003', 'BMW',

@@ -1,4 +1,4 @@
-package org.abondar.experimental.springdata.jpa.car;
+package org.abondar.experimental.springdata.jpa;
 
 import com.google.inject.internal.util.Lists;
 
@@ -64,11 +64,17 @@ public class CarServiceImpl implements CarService{
 
     @Override
     public List<Car> findByAge(int age, int offset,int limit) {
-        Pageable pageable = new PageRequest(offset,limit).next();
+        Pageable pageable = new PageRequest(offset,limit);
 
         return carRepository
                 .findAllByAgeAfter(age,pageable)
                 .getContent();
+    }
+
+    @Override
+    public String findCarData(int age, String licencePlate) {
+        CarView res = carRepository.findByAgeAndLicencePlate(age,licencePlate);
+        return res.getCarData();
     }
 
 
