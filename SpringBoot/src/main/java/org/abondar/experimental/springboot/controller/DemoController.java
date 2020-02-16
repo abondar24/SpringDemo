@@ -1,4 +1,4 @@
-package org.abondar.experimental.springboot;
+package org.abondar.experimental.springboot.controller;
 
 import org.abondar.experimental.springboot.model.Person;
 import org.springframework.http.ResponseEntity;
