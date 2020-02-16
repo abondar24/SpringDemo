@@ -26,12 +26,11 @@ public class SecureController {
 
     private JwtTokenProvider tokenProvider;
 
-    private PasswordEncoder passwordEncoder;
 
-    public SecureController(AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider, PasswordEncoder passwordEncoder) {
+
+    public SecureController(AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
-        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -43,19 +42,17 @@ public class SecureController {
     @PostMapping("/login")
     public ResponseEntity<Boolean> login(@RequestBody LoginRequest request){
 
-        //here for demo only. we pass encrypted password for login and encrypt password for start
-       String pwd= passwordEncoder.encode(request.getPassword());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
-                       pwd
+                     request.getPassword()
                 ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
         HttpHeaders authHeaders = new HttpHeaders();
-        authHeaders.set("Authentication", "JWT "+jwt);
+        authHeaders.set("Authorization", "JWT "+jwt);
 
 
         return new ResponseEntity<>(true,authHeaders, HttpStatus.OK);
