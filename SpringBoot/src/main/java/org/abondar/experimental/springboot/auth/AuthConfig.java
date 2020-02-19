@@ -83,6 +83,16 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/demo/**")
                 .permitAll()
+                .antMatchers("/actuator/**")
+                .permitAll()
+                .antMatchers("/swagger-ui.html/**")
+                .permitAll()
+                .antMatchers("/swagger-resources/**")
+                .permitAll()
+                .antMatchers("/webjars/**")
+                .permitAll()
+                .antMatchers("/v2/**")
+                .permitAll()
                 .anyRequest()
                 .authenticated();
 
