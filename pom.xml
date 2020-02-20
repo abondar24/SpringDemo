@@ -23,6 +23,7 @@
         <module>SpringBatch</module>
         <module>SpringBoot</module>
         <module>SpringReactive</module>
+        <module>SpringBootKafka</module>
     </modules>
 
     <properties>
