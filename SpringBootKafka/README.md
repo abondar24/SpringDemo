@@ -1,4 +1,4 @@
-### Spring boot Kafka
+# Spring boot Kafka
 
 Small demo with kafka producer and consumer
 
