@@ -11,6 +11,7 @@
     <modules>
         <module>ConfigServer</module>
         <module>DemoApp</module>
+        <module>ServiceDiscovery</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -48,7 +49,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
-
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-eureka-server</artifactId>
+                <version>1.4.7.RELEASE</version>
+            </dependency>
+        
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
