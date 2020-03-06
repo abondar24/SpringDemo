@@ -9,6 +9,9 @@ ConfigServer Default Config: GET http://localhost:8024/demo-config/default
 ServiceDiscovery Eureka apps: GET http://localhost:8761/eureka/apps
 ServiceDiscovery: GET http://localhost:8761/eureka/apps/demo-app
 
+Service GateWay: GET http://localhost:8765/actuator/routes
+Service GateWay DemoApp: GET http://localhost:8765/api/demo-app/<any-demo-app-endpoint>
+
 DemoApp Refresh Config: POST http://localhost:8019/actuator/refresh
 DemoApp: GET http://localhost:8019/cloud
 DemoApp Eureka client data: GET http://localhost:8019/cloud/discovery/demo-app 
