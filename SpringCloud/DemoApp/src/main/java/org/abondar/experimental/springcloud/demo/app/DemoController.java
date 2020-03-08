@@ -3,12 +3,16 @@ package org.abondar.experimental.springcloud.demo.app;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import org.abondar.experimental.springcloud.demo.app.stream.DemoMessage;
+import org.abondar.experimental.springcloud.demo.app.stream.DemoSource;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +23,15 @@ import java.util.Random;
 @RequestMapping("/cloud")
 public class DemoController {
 
-    @Autowired
     private DiscoveryClient discoveryClient;
+
+    private DemoSource msgSource;
+
+    @Autowired
+    public DemoController(DiscoveryClient discoveryClient, DemoSource msgSource) {
+        this.discoveryClient = discoveryClient;
+        this.msgSource = msgSource;
+    }
 
     @GetMapping
     public ResponseEntity<String> getApplication(){
@@ -61,6 +72,12 @@ public class DemoController {
     public String demoFallBack(){
         randomFailure();
         return  "ok";
+    }
+
+    @PutMapping("/stream")
+    public ResponseEntity<DemoMessage> streamMsg(@RequestBody String message) {
+      DemoMessage msg = msgSource.publishMessage(message);
+      return ResponseEntity.ok(msg);
     }
 
 

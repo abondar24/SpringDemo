@@ -1,7 +1,7 @@
 ##Spring Cloud demo
 
 
-## endpoints
+## Endpoints
 
 ```yaml
 ConfigServer Default Config: GET http://localhost:8024/demo-config/default
@@ -17,6 +17,13 @@ DemoApp: GET http://localhost:8019/cloud
 DemoApp Eureka client data: GET http://localhost:8019/cloud/discovery/demo-app 
 DemoApp Hystrix Cirtuit: GET http://localhost:8019/cloud/hystrix/circuit
 DemoApp Hystrix Fallback: GET http://localhost:8019/cloud/hystrix/fallback
+
+DemoApp send message to Kafka client: PUT http://localhost:8019/cloud/stream  
+PUT BODY: message text
+PUT Response: {
+              "body": "dgdfgdgdfg",
+              "id": "d030eab1-e1a7-4429-bbbe-e99f6d1b4440"
+          }
 ```
 
 ### Note

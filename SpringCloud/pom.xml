@@ -13,6 +13,7 @@
         <module>DemoApp</module>
         <module>ServiceDiscovery</module>
         <module>ServiceGateway</module>
+        <module>DemoKafkaClient</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
