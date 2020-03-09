@@ -7,3 +7,4 @@ Set of spring related demos.
 - [SpringBootKafka](SpringBootKafka/README.md)
 - [SpringReactive](SpringReactive/README.md)
 - [SpringGraphQL](SpringGraphQL/README.md)
+- [SpringCloud](SpringCloud/README.md)
