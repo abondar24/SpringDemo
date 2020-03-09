@@ -1,7 +1,11 @@
 package org.abondar.experimental.springcloud.demo.kafka.client.stream;
 
 
-public class DemoMessage {
+import java.io.Serializable;
+
+public class DemoMessage implements Serializable {
+
+    private static long SERIAL_VERSION_UID = -1L;
 
     private String body;
     private String id;

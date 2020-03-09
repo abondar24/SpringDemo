@@ -24,6 +24,8 @@ PUT Response: {
               "body": "dgdfgdgdfg",
               "id": "d030eab1-e1a7-4429-bbbe-e99f6d1b4440"
           }
+
+DemoKafkaClient message from cache: GET http://localhost:8010/redis/find/{msgId}
 ```
 
 ### Note
