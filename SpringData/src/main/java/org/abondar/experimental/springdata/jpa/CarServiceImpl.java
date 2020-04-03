@@ -1,7 +1,6 @@
 package org.abondar.experimental.springdata.jpa;
 
 import com.google.inject.internal.util.Lists;
-
 import org.joda.time.DateTime;
 import org.joda.time.Years;
 import org.slf4j.Logger;
@@ -13,7 +12,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,11 +22,10 @@ import java.util.Optional;
 @Service("carService")
 
 @Transactional
-public class CarServiceImpl implements CarService{
-    private Logger logger = LoggerFactory.getLogger(CarServiceImpl.class);
-
+public class CarServiceImpl implements CarService {
     @Autowired
     CarRepository carRepository;
+    private Logger logger = LoggerFactory.getLogger(CarServiceImpl.class);
 
     @Override
     @Transactional(readOnly = true)
@@ -41,39 +39,41 @@ public class CarServiceImpl implements CarService{
     }
 
     @Override
-    @Scheduled(cron="0 2 * * * *") //for running in task module
+    @Scheduled(cron = "0 2 * * * *") //for running in task module
     public void updateCarAgeJob() {
-      List<Car> cars = findAll();
+        List<Car> cars = findAll();
         DateTime curTime = DateTime.now();
         logger.info("Car age update started");
 
-        for (Car car : cars){
-            int age = Years.yearsBetween(car.getManufactureDate(),curTime).getYears();
+        for (Car car : cars) {
+            int age = Years.yearsBetween(car.getManufactureDate(), curTime).getYears();
             car.setAge(age);
             save(car);
-            logger.info("Car age update---"+car);
+            logger.info("Car age update---" + car);
         }
         logger.info("Car age update completed");
     }
 
     @Override
     public Car findByLicencePlate(String licencePlate) {
-        Optional<Car> car =carRepository.findByLicencePlate(licencePlate);
+        Optional<Car> car = carRepository.findByLicencePlate(licencePlate);
         return car.orElse(new Car());
     }
 
     @Override
-    public List<Car> findByAge(int age, int offset,int limit) {
-        Pageable pageable = new PageRequest(offset,limit);
+    public List<Car> findByAge(int age, int offset, int limit) {
+        //uncomment before run
+       // Pageable pageable = new PageRequest(offset, limit);
 
-        return carRepository
-                .findAllByAgeAfter(age,pageable)
-                .getContent();
+        return new ArrayList<>();
+       // return carRepository
+       //         .findAllByAgeAfter(age, pageable)
+       //         .getContent();
     }
 
     @Override
     public String findCarData(int age, String licencePlate) {
-        CarView res = carRepository.findByAgeAndLicencePlate(age,licencePlate);
+        CarView res = carRepository.findByAgeAndLicencePlate(age, licencePlate);
         return res.getCarData();
     }
 

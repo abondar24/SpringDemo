@@ -37,7 +37,25 @@
         <artifactId>h2</artifactId>
         <version>1.4.192</version>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+    <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-mongodb</artifactId>
+        <version>2.2.6.RELEASE</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons -->
+
+    <!--Comment for jpa and jdbc-->
+    <dependency>
+        <groupId>org.springframework.data</groupId>
+        <artifactId>spring-data-commons</artifactId>
+        <version>2.2.6.RELEASE</version>
+    </dependency>
+    <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongo-java-driver</artifactId>
+        <version>3.12.2</version>
+    </dependency>
+
     <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
@@ -58,7 +76,9 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.abondar.experimental.springdata.jpa.JPARun</mainClass>
+                            <!--change main class for jdbc or mongo if needed-->
+<!--                            <mainClass>org.abondar.experimental.springdata.jpa.JPARun</mainClass>-->
+                            <mainClass>org.abondar.experimental.springdata.mongo.MongoRun</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>./lib</Class-Path>
