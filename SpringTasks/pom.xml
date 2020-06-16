@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>org.abondar.experimental</groupId>
-            <artifactId>SpringDataBase</artifactId>
+            <artifactId>SpringData</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
