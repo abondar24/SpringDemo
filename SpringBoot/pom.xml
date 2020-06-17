@@ -40,6 +40,11 @@
         <version>2.3.1</version>
     </dependency>
     <dependency>
+        <groupId>org.abondar.experimental</groupId>
+        <artifactId>spring-boot-environment-starter</artifactId>
+        <version>0.0.1</version>
+    </dependency>
+    <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-params</artifactId>
         <scope>test</scope>

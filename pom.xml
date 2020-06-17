@@ -24,6 +24,7 @@
         <module>SpringBoot</module>
         <module>SpringReactive</module>
         <module>SpringBootKafka</module>
+        <module>spring-boot-environment-starter</module>
     </modules>
 
     <properties>
