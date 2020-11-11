@@ -1,6 +1,7 @@
 package org.abondar.experimental.springbase.FactoryBean;
 
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -9,10 +10,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * Created by abondar on 02.07.16.
  */
 
-public class FactoryBeanRun {
-    static Logger logger = LoggerFactory.getLogger(FactoryBeanRun.class);
+public class FactoryBeanCommand implements Command {
+    static Logger logger = LoggerFactory.getLogger(FactoryBeanCommand.class);
 
-    public static void main(String[] args) {
+    public  void run() {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 
         ctx.register(FactoryBeanConfiguration.class);

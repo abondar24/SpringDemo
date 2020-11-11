@@ -2,6 +2,7 @@ package org.abondar.experimental.springbase.HelloWorld;
 
 
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -10,11 +11,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * Created by abondar on 02.07.16.
  */
 
-public class HelloWorldRun {
+public class HelloWorldCommand implements Command {
 
-    static Logger logger = LoggerFactory.getLogger(HelloWorldRun.class);
+    static Logger logger = LoggerFactory.getLogger(HelloWorldCommand.class);
 
-    public static void main(String[] args) {
+    public void run() {
 
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
         ctx.register(HelloWorldConfiguration.class);

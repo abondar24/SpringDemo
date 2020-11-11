@@ -1,6 +1,7 @@
 package org.abondar.experimental.springbase.BeanLifeCycle;
 
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationException;
@@ -10,10 +11,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * Created by abondar on 02.07.16.
  */
 
-public class BeanLifeCycleRun {
-    static Logger logger = LoggerFactory.getLogger(BeanLifeCycleRun.class);
+public class BeanLifeCycleCommand implements Command {
+    static Logger logger = LoggerFactory.getLogger(BeanLifeCycleCommand.class);
 
-    public static void main(String[] args) {
+    public void run() {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 
         ctx.register(BeanLifeCycleConfiguration.class);
