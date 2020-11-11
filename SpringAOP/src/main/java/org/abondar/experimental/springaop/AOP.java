@@ -54,6 +54,9 @@ public class AOP {
                     SecureBeforeAdviceCommand sba = new SecureBeforeAdviceCommand();
                     cmdRunner.storeAndRun(sba);
                     break;
+                default:
+                    System.out.println("Unknown command");
+                    break;
 
             }
         } catch (IllegalArgumentException ex){

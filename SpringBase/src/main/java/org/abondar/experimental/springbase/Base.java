@@ -31,6 +31,9 @@ public class Base {
                     MessageEventCommand me = new MessageEventCommand();
                     cmdRunner.storeAndRun(me);
                     break;
+                default:
+                    System.out.println("Unknown command");
+                    break;
             }
         } catch (IllegalArgumentException ex){
             System.out.println("Unknown command");
