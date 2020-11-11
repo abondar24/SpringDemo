@@ -10,8 +10,8 @@ import java.util.concurrent.Future;
 /**
  * Created by abondar on 18.07.16.
  */
-public class TaskRun {
-    private static Logger logger = LoggerFactory.getLogger(TaskRun.class);
+public class TaskCommand {
+    private static Logger logger = LoggerFactory.getLogger(TaskCommand.class);
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();

@@ -7,5 +7,5 @@ Spring batch demo with H2 database
 ```yaml
 mvn clean install
 
-java -jar <jar-location>/spring-batch.jar >
+java -jar <jar-location>/spring-batch.jar
 ```

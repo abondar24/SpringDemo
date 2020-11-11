@@ -11,6 +11,7 @@ Big Spring 4-5 demo.
 - [SpringData](SpringData/README.md)
 - [SpringGraphQL](SpringGraphQL/README.md)
 - [SpringReactive](SpringReactive/README.md)
+- [SpringTasks](SpringTasks/README.md)
 
 
 

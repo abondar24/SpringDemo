@@ -25,5 +25,27 @@
 
 
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>org.abondar.experimental.springtasks.TaskCommand</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>./lib</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <finalName>spring-task</finalName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
