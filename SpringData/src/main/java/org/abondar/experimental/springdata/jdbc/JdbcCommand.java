@@ -1,5 +1,6 @@
 package org.abondar.experimental.springdata.jdbc;
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -12,17 +13,16 @@ import java.util.List;
 /**
  * Created by abondar on 07.07.16.
  */
-public class JdbcRun {
+public class JdbcCommand implements Command {
 
-    private static Logger logger = LoggerFactory.getLogger(JdbcRun.class);
+    private static final Logger logger = LoggerFactory.getLogger(JdbcCommand.class);
 
-    private static ContactDao contactDao;
-    public static void main(String[] args) {
+    public void run() {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
         ctx.register(JdbcConfiguration.class);
         ctx.refresh();
 
-        contactDao = ctx.getBean(ContactDao.class);
+        ContactDao contactDao = ctx.getBean(ContactDao.class);
 
         List<Contact> contacts = contactDao.findAll();
 
@@ -48,15 +48,15 @@ public class JdbcRun {
         List<Contact> contacts2 = contactDao.findAll();
         listAll(contacts2);
 
-        logger.info("First name of the contact with id 1: "+contactDao.findFirstNameById(1L));
-        logger.info("Last name of the contact with id 1: "+contactDao.findLastNameById(1L));
+        logger.info("First name of the contact with id 1: "+ contactDao.findFirstNameById(1L));
+        logger.info("Last name of the contact with id 1: "+ contactDao.findLastNameById(1L));
 
         logger.info("Listing with details");
         List<Contact> contactsWithDetails = contactDao.findAllWithDetail();
         listAll(contactsWithDetails);
 
 
-        logger.info("Contact with first name John: "+contactDao.findByFirstName("John"));
+        logger.info("Contact with first name John: "+ contactDao.findByFirstName("John"));
 
         Contact contactUPD = contactsWithDetails.get(1);
         contactUPD.setLastName("Daniels");

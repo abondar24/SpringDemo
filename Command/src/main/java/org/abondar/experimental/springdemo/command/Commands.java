@@ -13,5 +13,8 @@ public enum Commands {
     MC,
     PC,
     PX,
-    SBA
+    SBA,
+    JPA,
+    JDBC,
+    MG
 }

@@ -1,5 +1,6 @@
 package org.abondar.experimental.springdata.jpa;
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +11,10 @@ import java.util.List;
 /**
  * Created by abondar on 18.07.16.
  */
-public class JPARun {
-    private static Logger logger = LoggerFactory.getLogger(JPARun.class);
+public class JpaCommand implements Command {
+    private static Logger logger = LoggerFactory.getLogger(JpaCommand.class);
 
-    public static void main(String[] args) {
+    public void run() {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
         ctx.register(JPAConfig.class);
         ctx.refresh();

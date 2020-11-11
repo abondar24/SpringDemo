@@ -13,6 +13,13 @@
 
 <dependencies>
     <dependency>
+        <groupId>org.abondar.experimental</groupId>
+        <artifactId>Command</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <scope>compile</scope>
+    </dependency>
+
+    <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-jdbc</artifactId>
         <version>${spring.version}</version>
@@ -76,14 +83,13 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <!--change main class for jdbc or mongo if needed-->
-<!--                            <mainClass>org.abondar.experimental.springdata.jpa.JPARun</mainClass>-->
-                            <mainClass>org.abondar.experimental.springdata.mongo.MongoRun</mainClass>
+                            <mainClass>org.abondar.experimental.springdata.Data</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>./lib</Class-Path>
                         </manifestEntries>
                     </archive>
+                    <finalName>spring-data</finalName>
                 </configuration>
             </plugin>
         </plugins>

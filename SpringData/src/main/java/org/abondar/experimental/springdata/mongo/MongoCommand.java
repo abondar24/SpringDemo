@@ -1,13 +1,14 @@
 package org.abondar.experimental.springdata.mongo;
 
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.joda.time.DateTime;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.List;
 
-public class MongoRun {
-    public static void main(String[] args) {
+public class MongoCommand implements Command {
+    public void run() {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
         ctx.register(MongoConfig.class);
         ctx.refresh();

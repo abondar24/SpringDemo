@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,13 +61,11 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public List<Car> findByAge(int age, int offset, int limit) {
-        //uncomment before run
-       // Pageable pageable = new PageRequest(offset, limit);
+        Pageable pageable = PageRequest.of(offset, limit);
 
-        return new ArrayList<>();
-       // return carRepository
-       //         .findAllByAgeAfter(age, pageable)
-       //         .getContent();
+        return carRepository
+               .findAllByAgeAfter(age, pageable)
+                .getContent();
     }
 
     @Override
