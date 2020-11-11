@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by abondar on 25.07.16.
  */
-public class SpringBatchRun {
+public class SpringBatchCommand {
     public static void main(String[] args) throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
         ctx.register(SpringBatchConfig.class);
