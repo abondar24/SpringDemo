@@ -25,6 +25,7 @@
         <module>SpringReactive</module>
         <module>SpringBootKafka</module>
         <module>spring-boot-environment-starter</module>
+        <module>Command</module>
     </modules>
 
     <properties>
@@ -133,6 +134,20 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>
