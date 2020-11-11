@@ -2,6 +2,7 @@ package org.abondar.experimental.springaop.framework;
 
 import org.abondar.experimental.springaop.modifycheck.IsModified;
 import org.abondar.experimental.springaop.modifycheck.TargetBean;
+import org.abondar.experimental.springdemo.command.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -9,10 +10,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 /**
  * Created by abondar on 18.07.16.
  */
-public class Main {
+public class FrameworkCommand implements Command {
     private static  Logger logger = LoggerFactory.getLogger(MyAdvice.class);
 
-    public static void main(String[] args) {
+    public void run() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(MyConfiguration.class);
         context.refresh();

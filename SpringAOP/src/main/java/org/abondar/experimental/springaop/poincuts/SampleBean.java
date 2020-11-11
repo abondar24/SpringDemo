@@ -1,4 +1,4 @@
-package org.abondar.experimental.springaop.pointuts;
+package org.abondar.experimental.springaop.poincuts;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

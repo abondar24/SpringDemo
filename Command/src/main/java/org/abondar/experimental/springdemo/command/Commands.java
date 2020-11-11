@@ -4,5 +4,14 @@ public enum Commands {
     HW,
     BLC,
     FB,
-    ME
+    ME,
+    AOP,
+    AA,
+    FR,
+    AJ,
+    KG,
+    MC,
+    PC,
+    PX,
+    SBA
 }

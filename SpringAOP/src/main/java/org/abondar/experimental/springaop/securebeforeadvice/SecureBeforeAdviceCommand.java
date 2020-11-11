@@ -1,5 +1,6 @@
 package org.abondar.experimental.springaop.securebeforeadvice;
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.ProxyFactory;
@@ -7,10 +8,10 @@ import org.springframework.aop.framework.ProxyFactory;
 /**
  * Created by abondar on 16.07.16.
  */
-public class Main {
+public class SecureBeforeAdviceCommand implements Command {
     static Logger logger = LoggerFactory.getLogger(SecurityAdvice.class);
 
-    public static void main(String[] args) {
+    public  void run() {
         SecurityManager securityManager = new SecurityManager();
         SecureBean secureBean = getSecureBean();
 

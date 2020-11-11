@@ -1,4 +1,4 @@
-package org.abondar.experimental.springaop.pointuts;
+package org.abondar.experimental.springaop.poincuts;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

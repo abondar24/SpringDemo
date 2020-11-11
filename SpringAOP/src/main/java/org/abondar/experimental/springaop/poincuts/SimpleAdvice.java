@@ -1,4 +1,4 @@
-package org.abondar.experimental.springaop.pointuts;
+package org.abondar.experimental.springaop.poincuts;
 
 
 import org.aopalliance.intercept.MethodInterceptor;

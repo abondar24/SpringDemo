@@ -1,6 +1,7 @@
 package org.abondar.experimental.springaop.modifycheck;
 
 import org.abondar.experimental.springaop.securebeforeadvice.SecurityAdvice;
+import org.abondar.experimental.springdemo.command.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.IntroductionAdvisor;
@@ -9,10 +10,10 @@ import org.springframework.aop.framework.ProxyFactory;
 /**
  * Created by abondar on 18.07.16.
  */
-public class Main {
+public class ModifyCheckCommand implements Command {
     static Logger logger = LoggerFactory.getLogger(SecurityAdvice.class);
 
-    public static void main(String[] args) {
+    public  void run() {
         TargetBean target = new TargetBean();
         target.setName("Ned Stark");
 

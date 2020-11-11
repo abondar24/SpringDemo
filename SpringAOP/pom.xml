@@ -26,8 +26,31 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.8.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.abondar.experimental</groupId>
+            <artifactId>Command</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <mainClass>org.abondar.experimental.springaop.AOP</mainClass>
+                        </manifest>
+                    </archive>
+                    <finalName>spring-aop</finalName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

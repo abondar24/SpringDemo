@@ -1,4 +1,4 @@
-package org.abondar.experimental.springaop.pointuts;
+package org.abondar.experimental.springaop.poincuts;
 
 /**
  * Created by abondar on 17.07.16.

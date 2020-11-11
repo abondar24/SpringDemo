@@ -1,12 +1,13 @@
 package org.abondar.experimental.springaop.aroundadivce;
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.springframework.aop.framework.ProxyFactory;
 
 /**
  * Created by abondar on 16.07.16.
  */
-public class Main {
-    public static void main(String[] args) {
+public class AroundAdviceCommand implements Command {
+    public void run() {
       WorkerBean bean = getWorkerBean();
         bean.doWork(1000000);
     }

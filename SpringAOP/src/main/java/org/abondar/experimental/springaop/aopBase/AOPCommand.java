@@ -1,15 +1,15 @@
 package org.abondar.experimental.springaop.aopBase;
 
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.aop.interceptor.SimpleTraceInterceptor;
 
 /**
  * Created by abondar on 16.07.16.
  */
-public class AOPRun {
+public class AOPCommand implements Command {
 
-    public static void main(String[] args) {
+    public void run() {
 
         MessageWriter target = new MessageWriter();
 

@@ -1,5 +1,6 @@
-package org.abondar.experimental.springaop.pointuts;
+package org.abondar.experimental.springaop.poincuts;
 
+import org.abondar.experimental.springdemo.command.Command;
 import org.aopalliance.aop.Advice;
 import org.springframework.aop.Advisor;
 import org.springframework.aop.Pointcut;
@@ -13,8 +14,8 @@ import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 /**
  * Created by abondar on 16.07.16.
  */
-public class Main {
-    public static void main(String[] args) {
+public class PointcutCommand implements Command {
+    public void run() {
         invokeStatic();
         invokeDynamic();
         invokeNamed();

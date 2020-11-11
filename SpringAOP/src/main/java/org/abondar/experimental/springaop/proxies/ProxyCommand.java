@@ -1,6 +1,7 @@
 package org.abondar.experimental.springaop.proxies;
 
-import org.abondar.experimental.springaop.pointuts.SampleBean;
+import org.abondar.experimental.springaop.poincuts.SampleBean;
+import org.abondar.experimental.springdemo.command.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.Advisor;
@@ -11,10 +12,10 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 /**
  * Created by abondar on 17.07.16.
  */
-public class ProxyTest {
+public class ProxyCommand implements Command {
     private static Logger logger = LoggerFactory.getLogger(SampleBean.class);
 
-    public static void main(String[] args) {
+    public void run() {
         SimpleBean target = new DummySimpleBean();
 
         Advisor advisor = new DefaultPointcutAdvisor(new TestPointCut(), new NoOpBeforeAdvice());
