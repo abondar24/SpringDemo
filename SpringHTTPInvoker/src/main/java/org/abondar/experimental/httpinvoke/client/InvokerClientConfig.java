@@ -1,4 +1,4 @@
-package org.abondar.experimental.httpinvoke;
+package org.abondar.experimental.httpinvoke.client;
 
 import org.abondar.experimental.springdata.jdbc.ContactDao;
 import org.springframework.context.annotation.Bean;

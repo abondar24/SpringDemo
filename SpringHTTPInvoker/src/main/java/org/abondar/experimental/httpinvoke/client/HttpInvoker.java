@@ -1,4 +1,4 @@
-package org.abondar.experimental.httpinvoke;
+package org.abondar.experimental.httpinvoke.client;
 
 import org.abondar.experimental.springdata.jdbc.Contact;
 import org.abondar.experimental.springdata.jdbc.ContactDao;
@@ -11,8 +11,8 @@ import java.util.List;
 /**
  * Created by abondar on 19.07.16.
  */
-public class HttpInvokerRun {
-    private static Logger logger = LoggerFactory.getLogger(HttpInvokerRun.class);
+public class HttpInvoker {
+    private static final Logger logger = LoggerFactory.getLogger(HttpInvoker.class);
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();

@@ -1,4 +1,4 @@
-package org.abondar.experimental.httpinvoke;
+package org.abondar.experimental.httpinvoke.server;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

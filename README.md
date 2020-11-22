@@ -1,5 +1,5 @@
 # SpringDemo
-Big Spring 4-5 demo.
+Set of Spring 4-5 demos.
 
 - [SpringAOP](SpringAOP/README.md)
 - [SpringBase](SpringBase/README.md)
@@ -10,8 +10,12 @@ Big Spring 4-5 demo.
 - [SpringCloud](SpringCloud/README.md)
 - [SpringData](SpringData/README.md)
 - [SpringGraphQL](SpringGraphQL/README.md)
+- [SpringHTTPInvoker](SpringHTTPInvoker/README.md)
 - [SpringReactive](SpringReactive/README.md)
 - [SpringTasks](SpringTasks/README.md)
+- [SpringMVC](SpringMVC/README.md)
+- [SpringWS](SpringWS/README.md)
+
 
 
 
