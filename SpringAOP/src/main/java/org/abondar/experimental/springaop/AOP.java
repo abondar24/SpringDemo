@@ -14,6 +14,10 @@ import org.abondar.experimental.springdemo.command.Commands;
 
 public class AOP {
     public static void main(String[] args) {
+        if (args.length==0){
+            System.out.println("Missing argument. Please check documentation for available argynebts");
+            System.exit(0);
+        }
         String arg = args[0].toUpperCase();
         CommandRunner cmdRunner = new CommandRunner();
         try {
