@@ -15,6 +15,7 @@ Set of Spring 4-5 demos.
 - [SpringTasks](SpringTasks/README.md)
 - [SpringMVC](SpringMVC/README.md)
 - [SpringWS](SpringWS/README.md)
+- [SpringHazelcast](SpringHazelcast/README.md)
 
 
 

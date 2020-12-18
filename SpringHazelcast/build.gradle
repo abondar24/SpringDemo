@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'idea'
+    id "org.springframework.boot" version "2.4.0"
+    id "io.freefair.lombok" version "4.1.4"
+
+}
+
+apply plugin: 'application'
+apply plugin: 'io.spring.dependency-management'
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+mainClassName = 'org.abondar.experimental.spring.hazelcast.HazelCastDemoApplication'
+
+repositories {
+    mavenCentral()
+}
+
+bootJar {
+    archivesBaseName = 'hazelcast'
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-cache"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-test"
+    implementation "com.hazelcast:hazelcast-all:4.1"
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+
+}
+
+test {
+    useJUnitPlatform()
+}
