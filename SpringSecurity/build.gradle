@@ -1,0 +1,25 @@
+plugins {
+    id "java"
+    id "idea"
+    id "org.springframework.boot" version "$springBootVersion"
+}
+
+group "org.abondar.experimental.springsecurity"
+version "1.0-SNAPSHOT"
+
+apply plugin: "java"
+apply plugin: "io.spring.dependency-management"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+test {
+    useJUnitPlatform()
+}
