@@ -1,0 +1,5 @@
+jwt:
+  secret: some-32-character-ultra-secure-and-ultra-long-secret
+  issuer: Exerimental development team
+  type: JWT
+  audience: SecurityApp

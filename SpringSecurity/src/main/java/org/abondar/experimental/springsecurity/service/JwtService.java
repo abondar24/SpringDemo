@@ -1,19 +1,24 @@
 package org.abondar.experimental.springsecurity.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.abondar.experimental.springsecurity.model.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import static org.abondar.experimental.springsecurity.model.Claims.AUD_CLAIM;
+import static org.abondar.experimental.springsecurity.model.Claims.ISS_CLAIM;
+import static org.abondar.experimental.springsecurity.model.Claims.PWD_CLAIM;
+import static org.abondar.experimental.springsecurity.model.Claims.ROLE_CLAIM;
+import static org.abondar.experimental.springsecurity.model.Claims.SUB_CLAIM;
 
 @Service
 public class JwtService {
@@ -30,30 +35,31 @@ public class JwtService {
     @Value("${jwt.audience}")
     private String jwtAudience;
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public JwtService(UserService userService) {
         this.userService = userService;
     }
 
-    private static final String ROLE_CLAIM = "roles";
 
-    private static final String PWD_CLAIM = "pwd";
 
-    private static final long EXP_TIME = 3600;
+    private static final long EXP_TIME = 36000;
 
-    public String generateToken(String username, String password,List<String> roles){
+    public String generateToken(String userId, String password,List<String> roles){
 
         var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-        var claims = Map.of(ROLE_CLAIM,roles,PWD_CLAIM,password);
+        var claims = Map.of(
+                ROLE_CLAIM.getVal(),roles,
+                PWD_CLAIM.getVal(),password,
+                ISS_CLAIM.getVal(),jwtIssuer,
+                AUD_CLAIM.getVal(),jwtAudience,
+                SUB_CLAIM.getVal(),userId,
+                "exp",new Date(System.currentTimeMillis()+EXP_TIME));
+
         return Jwts.builder()
                 .signWith(secretKey)
                 .setHeaderParam("typ",jwtType)
-                .setAudience(jwtAudience)
-                .setSubject(username)
-                .setIssuer(jwtIssuer)
-                .setExpiration(new Date(System.currentTimeMillis()+EXP_TIME))
                 .setClaims(claims)
                 .compact();
     }
@@ -63,22 +69,25 @@ public class JwtService {
       var parser = getParser();
 
       var claims = parser
-              .parseClaimsJws(token);
+              .parseClaimsJws(token).getBody();
 
-      var username = claims.getBody().getSubject();
+      var userId = claims.getSubject();
 
-      var userData= userService.find(username);
+      var userData= userService.find(userId);
       if (userData.isPresent()){
-          var pwd = parser.parseClaimsJwt(token).getBody().get(PWD_CLAIM);
+          var pwd = claims.get(PWD_CLAIM.getVal());
           return  pwd.equals(userData.get().hash());
       }
 
+      //TODO: catch ExpiredJwtException
       return false;
     }
 
 
     private JwtParser getParser(){
+        var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
                 .requireIssuer(jwtIssuer)
                 .requireAudience(jwtAudience)
                 .build();
