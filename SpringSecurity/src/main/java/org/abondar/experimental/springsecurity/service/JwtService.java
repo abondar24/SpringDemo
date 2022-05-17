@@ -3,16 +3,19 @@ package org.abondar.experimental.springsecurity.service;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.abondar.experimental.springsecurity.model.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.abondar.experimental.springsecurity.model.Claims.AUD_CLAIM;
 import static org.abondar.experimental.springsecurity.model.Claims.ISS_CLAIM;
@@ -69,7 +72,7 @@ public class JwtService {
     }
 
 
-    public boolean validateToken(String token){
+    public Optional<Authentication> parseAndValidateToken(String token){
       var parser = getParser();
 
       var claims = parser
@@ -80,11 +83,19 @@ public class JwtService {
       var userData= userService.find(userId);
       if (userData.isPresent()){
           var pwd = claims.get(PWD_CLAIM.getVal());
-          return  pwd.equals(userData.get().hash());
+          if (pwd.equals(userData.get().hash())){
+              var roles = (List<String>) claims.get(ROLE_CLAIM.getVal());
+              var grantedAuth = roles.stream()
+                      .map(SimpleGrantedAuthority::new)
+                      .toList();
+
+              var auth = new UsernamePasswordAuthenticationToken(userData.get().login(),null,grantedAuth);
+              return Optional.of(auth);
+          }
       }
 
       //TODO: catch ExpiredJwtException
-      return false;
+      return Optional.empty();
     }
 
 

@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,9 +39,10 @@ public class JwtServiceTest {
         var data = userService.find(resp.id());
 
         var token = service.generateToken(resp.id());
-        var isValid = service.validateToken(token);
+        var authentication = service.parseAndValidateToken(token);
 
-        assertTrue(isValid);
+        assertTrue(authentication.isPresent());
+        assertEquals(data.get().login(), authentication.get().getPrincipal());
     }
 
 
