@@ -23,7 +23,9 @@ public class JwtServiceTest {
 
     @Test
     public void generateTokenTest(){
-        var token = service.generateToken("123","test", List.of("test"));
+        var req = new UserRequest("test","test",List.of("test"));
+        var resp = userService.addOrUpdateStore(req);
+        var token = service.generateToken(resp.id());
 
         assertNotNull(token);
         assertFalse(token.isBlank());
@@ -35,7 +37,7 @@ public class JwtServiceTest {
         var resp = userService.addOrUpdateStore(req);
         var data = userService.find(resp.id());
 
-        var token = service.generateToken(resp.id(),data.get().hash(),req.roles());
+        var token = service.generateToken(resp.id());
         var isValid = service.validateToken(token);
 
         assertTrue(isValid);

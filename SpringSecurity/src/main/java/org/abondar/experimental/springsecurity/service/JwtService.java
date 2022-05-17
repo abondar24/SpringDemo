@@ -46,12 +46,16 @@ public class JwtService {
 
     private static final long EXP_TIME = 36000;
 
-    public String generateToken(String userId, String password,List<String> roles){
+    public String generateToken(String userId){
+        var userData = userService.find(userId);
+        if (userData.isEmpty()){
+            return "";
+        }
 
         var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         var claims = Map.of(
-                ROLE_CLAIM.getVal(),roles,
-                PWD_CLAIM.getVal(),password,
+                ROLE_CLAIM.getVal(),userData.get().roles(),
+                PWD_CLAIM.getVal(),userData.get().hash(),
                 ISS_CLAIM.getVal(),jwtIssuer,
                 AUD_CLAIM.getVal(),jwtAudience,
                 SUB_CLAIM.getVal(),userId,
