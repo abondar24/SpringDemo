@@ -42,7 +42,10 @@ public class SecurityController {
 
         var headers = new HttpHeaders();
         headers.add("Authorization","Bearer: "+jwt);
-        return ResponseEntity.of(Optional.of(resp));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resp);
     }
 
 
