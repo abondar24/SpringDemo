@@ -3,3 +3,4 @@ jwt:
   issuer: Exerimental development team
   type: JWT
   audience: SecurityApp
+  expTime: 36000

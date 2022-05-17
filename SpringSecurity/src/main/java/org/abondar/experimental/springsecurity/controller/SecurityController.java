@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
+import javax.annotation.security.RolesAllowed;
 import java.util.Optional;
 
+
+//TODO: oauth2 integration
+//TODO: swagger integration
+//TODO: make constant util
 @RestController
 @RequestMapping("/security")
 public class SecurityController {
@@ -36,12 +40,12 @@ public class SecurityController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest){
-        var resp =service.addOrUpdateStore(userRequest);
-        var jwt = jwtService.generateToken(resp.id());
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
+        var resp = service.addOrUpdateStore(userRequest);
+        var jwt = jwtService.generateToken(resp.id(), userRequest.password());
 
         var headers = new HttpHeaders();
-        headers.add("Authorization","Bearer: "+jwt);
+        headers.add("Authorization", "Bearer: " + jwt);
 
         return ResponseEntity.ok()
                 .headers(headers)
@@ -50,26 +54,26 @@ public class SecurityController {
 
 
     @GetMapping(
-            path = "/secret/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> getSecret(@PathVariable String id){
+    @RolesAllowed("user")
+    public ResponseEntity<String> getSecret() {
 
-        return ResponseEntity.of(Optional.of("Secret"));
+        return ResponseEntity.ok("Secret");
     }
 
     @GetMapping(
-            path="/ultra/{id}",
+            path = "/ultra",
             produces = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed("admin")
+    public ResponseEntity<String> getUltraSecret() {
 
-    public ResponseEntity<String> getUltraSecret(@PathVariable String id){
-
-        return ResponseEntity.of(Optional.of("Ultrasecret"));
+        return ResponseEntity.ok("Ultrasecret");
     }
 
     @DeleteMapping(
             path = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> deleteUser(@PathVariable String id){
+    public ResponseEntity<String> deleteUser(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.of(Optional.of("User deleted"));
     }
