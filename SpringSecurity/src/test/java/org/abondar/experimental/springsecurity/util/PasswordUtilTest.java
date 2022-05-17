@@ -1,4 +1,4 @@
-package org.abondar.experimental.springsecurity.service;
+package org.abondar.experimental.springsecurity.util;
 
 import org.abondar.experimental.springsecurity.util.PasswordUtil;
 import org.junit.jupiter.api.Test;

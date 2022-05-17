@@ -3,6 +3,7 @@ package org.abondar.experimental.springsecurity.service;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.abondar.experimental.springsecurity.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.abondar.experimental.springsecurity.model.Claims.AUD_CLAIM;
 import static org.abondar.experimental.springsecurity.model.Claims.ISS_CLAIM;
@@ -38,6 +39,9 @@ public class JwtService {
     @Value("${jwt.audience}")
     private String jwtAudience;
 
+    @Value("${jwt.expTime}")
+    private long expTime;
+
     private final UserService userService;
 
     @Autowired
@@ -46,10 +50,7 @@ public class JwtService {
     }
 
 
-
-    private static final long EXP_TIME = 36000;
-
-    public String generateToken(String userId){
+    public String generateToken(String userId,String password){
         var userData = userService.find(userId);
         if (userData.isEmpty()){
             return "";
@@ -58,11 +59,11 @@ public class JwtService {
         var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         var claims = Map.of(
                 ROLE_CLAIM.getVal(),userData.get().roles(),
-                PWD_CLAIM.getVal(),userData.get().hash(),
+                PWD_CLAIM.getVal(),password,
                 ISS_CLAIM.getVal(),jwtIssuer,
                 AUD_CLAIM.getVal(),jwtAudience,
                 SUB_CLAIM.getVal(),userId,
-                "exp",new Date(System.currentTimeMillis()+EXP_TIME));
+                "exp",new Date(System.currentTimeMillis()+ expTime));
 
         return Jwts.builder()
                 .signWith(secretKey)
@@ -82,9 +83,13 @@ public class JwtService {
 
       var userData= userService.find(userId);
       if (userData.isPresent()){
-          var pwd = claims.get(PWD_CLAIM.getVal());
-          if (pwd.equals(userData.get().hash())){
-              var roles = (List<String>) claims.get(ROLE_CLAIM.getVal());
+          var pwd = (String) claims.get(PWD_CLAIM.getVal());
+          if (PasswordUtil.verifyPassword(pwd,userData.get().hash())){
+              List<String> roles = (List<String>) claims.get(ROLE_CLAIM.getVal());
+              if (!rolesContained(userData.get().roles(),roles)){
+                  return Optional.empty();
+              }
+
               var grantedAuth = roles.stream()
                       .map(SimpleGrantedAuthority::new)
                       .toList();
@@ -94,8 +99,12 @@ public class JwtService {
           }
       }
 
-      //TODO: catch ExpiredJwtException
       return Optional.empty();
+    }
+
+    private boolean rolesContained(List<String> storedRoles, List<String> tokenRoles){
+       return storedRoles.stream().anyMatch(new HashSet<>(tokenRoles)::contains);
+
     }
 
 
