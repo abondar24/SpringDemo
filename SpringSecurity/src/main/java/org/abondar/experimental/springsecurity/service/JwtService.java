@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -57,9 +58,10 @@ public class JwtService {
         }
 
         var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        var pw = Base64.getEncoder().encode(password.getBytes());
         var claims = Map.of(
                 ROLE_CLAIM.getVal(),userData.get().roles(),
-                PWD_CLAIM.getVal(),password,
+                PWD_CLAIM.getVal(),new String(pw),
                 ISS_CLAIM.getVal(),jwtIssuer,
                 AUD_CLAIM.getVal(),jwtAudience,
                 SUB_CLAIM.getVal(),userId,
@@ -84,7 +86,8 @@ public class JwtService {
       var userData= userService.find(userId);
       if (userData.isPresent()){
           var pwd = (String) claims.get(PWD_CLAIM.getVal());
-          if (PasswordUtil.verifyPassword(pwd,userData.get().hash())){
+          var plainPwd = Base64.getDecoder().decode(pwd);
+          if (PasswordUtil.verifyPassword(new String(plainPwd),userData.get().hash())){
               List<String> roles = (List<String>) claims.get(ROLE_CLAIM.getVal());
               if (!rolesContained(userData.get().roles(),roles)){
                   return Optional.empty();
