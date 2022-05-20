@@ -3,7 +3,6 @@ package org.abondar.experimental.springsecurity.service;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.abondar.experimental.springsecurity.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,7 +11,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +19,6 @@ import java.util.Optional;
 
 import static org.abondar.experimental.springsecurity.model.Claims.AUD_CLAIM;
 import static org.abondar.experimental.springsecurity.model.Claims.ISS_CLAIM;
-import static org.abondar.experimental.springsecurity.model.Claims.PWD_CLAIM;
 import static org.abondar.experimental.springsecurity.model.Claims.ROLE_CLAIM;
 import static org.abondar.experimental.springsecurity.model.Claims.SUB_CLAIM;
 
@@ -51,67 +48,58 @@ public class JwtService {
     }
 
 
-    public String generateToken(String userId,String password){
+    public String generateToken(String userId) {
         var userData = userService.find(userId);
-        if (userData.isEmpty()){
+        if (userData.isEmpty()) {
             return "";
         }
 
         var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-        var pw = Base64.getEncoder().encode(password.getBytes());
         var claims = Map.of(
-                ROLE_CLAIM.getVal(),userData.get().roles(),
-                PWD_CLAIM.getVal(),new String(pw),
-                ISS_CLAIM.getVal(),jwtIssuer,
-                AUD_CLAIM.getVal(),jwtAudience,
-                SUB_CLAIM.getVal(),userId,
-                "exp",new Date(System.currentTimeMillis()+ expTime));
+                ROLE_CLAIM.getVal(), userData.get().roles(),
+                ISS_CLAIM.getVal(), jwtIssuer,
+                AUD_CLAIM.getVal(), jwtAudience,
+                SUB_CLAIM.getVal(), userId,
+                "exp", new Date(System.currentTimeMillis() + expTime));
 
         return Jwts.builder()
                 .signWith(secretKey)
-                .setHeaderParam("typ",jwtType)
+                .setHeaderParam("typ", jwtType)
                 .setClaims(claims)
                 .compact();
     }
 
 
-    public Optional<Authentication> parseAndValidateToken(String token){
-      var parser = getParser();
+    public Optional<Authentication> parseAndValidateToken(String token) {
+        var parser = getParser();
 
-      var claims = parser
-              .parseClaimsJws(token).getBody();
+        var claims = parser
+                .parseClaimsJws(token).getBody();
 
-      var userId = claims.getSubject();
+        var userId = claims.getSubject();
 
-      var userData= userService.find(userId);
-      if (userData.isPresent()){
-          var pwd = (String) claims.get(PWD_CLAIM.getVal());
-          var plainPwd = Base64.getDecoder().decode(pwd);
-          if (PasswordUtil.verifyPassword(new String(plainPwd),userData.get().hash())){
-              List<String> roles = (List<String>) claims.get(ROLE_CLAIM.getVal());
-              if (!rolesContained(userData.get().roles(),roles)){
-                  return Optional.empty();
-              }
+        var iss = claims.getIssuer();
+        if (!iss.equals(jwtIssuer)){
+            return Optional.empty();
+        }
 
-              var grantedAuth = roles.stream()
-                      .map(SimpleGrantedAuthority::new)
-                      .toList();
+        List<String> roles = (List<String>) claims.get(ROLE_CLAIM.getVal());
+        var grantedAuth = roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
 
-              var auth = new UsernamePasswordAuthenticationToken(userData.get().login(),null,grantedAuth);
-              return Optional.of(auth);
-          }
-      }
+        var auth = new UsernamePasswordAuthenticationToken(userId, null, grantedAuth);
+        return Optional.of(auth);
 
-      return Optional.empty();
     }
 
-    private boolean rolesContained(List<String> storedRoles, List<String> tokenRoles){
-       return storedRoles.stream().anyMatch(new HashSet<>(tokenRoles)::contains);
+    private boolean rolesContained(List<String> storedRoles, List<String> tokenRoles) {
+        return storedRoles.stream().anyMatch(new HashSet<>(tokenRoles)::contains);
 
     }
 
 
-    private JwtParser getParser(){
+    private JwtParser getParser() {
         var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)

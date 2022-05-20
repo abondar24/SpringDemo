@@ -23,6 +23,7 @@ import java.util.Optional;
 //TODO: oauth2 integration
 //TODO: swagger integration
 //TODO: make constant util
+//TODO: test jwt expiration
 @RestController
 @RequestMapping("/security")
 public class SecurityController {
@@ -42,7 +43,7 @@ public class SecurityController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
         var resp = service.addOrUpdateStore(userRequest);
-        var jwt = jwtService.generateToken(resp.id(), userRequest.password());
+        var jwt = jwtService.generateToken(resp.id());
 
         var headers = new HttpHeaders();
         headers.add("Authorization", "Bearer: " + jwt);
