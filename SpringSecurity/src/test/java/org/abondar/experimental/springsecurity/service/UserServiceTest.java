@@ -1,6 +1,6 @@
 package org.abondar.experimental.springsecurity.service;
 
-import org.abondar.experimental.springsecurity.model.UserRequest;
+import org.abondar.experimental.springsecurity.model.UserCreateRequest;
 import org.abondar.experimental.springsecurity.util.PasswordUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class UserServiceTest {
 
     @Test
     public void addNewUserTest(){
-        var usr= new UserRequest("test","test", List.of());
+        var usr= new UserCreateRequest("test","test", List.of());
 
         var resp = userService.addOrUpdateStore(usr);
         assertNotNull(resp);
@@ -35,10 +35,10 @@ public class UserServiceTest {
 
     @Test
     public void addExistingTest(){
-        var usr= new UserRequest("test","test",List.of());
+        var usr= new UserCreateRequest("test","test",List.of());
         userService.addOrUpdateStore(usr);
 
-        usr= new UserRequest("test","test1",List.of());
+        usr= new UserCreateRequest("test","test1",List.of());
         var resp =userService.addOrUpdateStore(usr);
 
         var res = userService.find(resp.id());
@@ -50,8 +50,23 @@ public class UserServiceTest {
     }
 
     @Test
-    public void deleteUserTest(){
-        var usr= new UserRequest("test","test",List.of());
+    public void findUserTest(){
+        var usr = new UserCreateRequest("test", "test", List.of());
+        var resp = userService.addOrUpdateStore(usr);
+
+        var foundById = userService.find(resp.id());
+        var foundByName = userService.findByUsername(usr.login());
+
+        assertTrue(foundById.isPresent());
+        assertTrue(foundByName.isPresent());
+        assertEquals(foundById.get().login(),foundByName.get().login());
+        assertEquals(foundById.get().hash(),foundByName.get().hash());
+
+    }
+
+    @Test
+    public void deleteUserTest() {
+        var usr = new UserCreateRequest("test", "test", List.of());
         var resp = userService.addOrUpdateStore(usr);
 
         userService.delete(resp.id());

@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public record UserRequest(
+public record UserCreateRequest(
         @NotNull
         @NotBlank
         String login,
