@@ -1,4 +1,4 @@
-package org.abondar.experimental.springsecurity.auth;
+package org.abondar.experimental.springsecurity.auth.filter;
 
 import io.jsonwebtoken.MalformedJwtException;
 import org.abondar.experimental.springsecurity.service.JwtService;

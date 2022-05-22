@@ -1,11 +1,10 @@
 package org.abondar.experimental.springsecurity.controller;
 
-import org.abondar.experimental.springsecurity.model.UserRequest;
+import org.abondar.experimental.springsecurity.model.UserCreateRequest;
 import org.abondar.experimental.springsecurity.model.UserResponse;
 import org.abondar.experimental.springsecurity.service.JwtService;
 import org.abondar.experimental.springsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +23,8 @@ import java.util.Optional;
 //TODO: swagger integration
 //TODO: make constant util
 //TODO: test jwt expiration
+//TODO: basic auth filter
+//TODO: multifactor auth integaration
 @RestController
 @RequestMapping("/security")
 public class SecurityController {
@@ -38,19 +39,23 @@ public class SecurityController {
         this.jwtService = jwtService;
     }
 
+
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest) {
-        var resp = service.addOrUpdateStore(userRequest);
-        var jwt = jwtService.generateToken(resp.id());
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserCreateRequest userCreateRequest) {
+        var resp = service.addOrUpdateStore(userCreateRequest);
 
-        var headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer: " + jwt);
+        return ResponseEntity.ok(resp);
+    }
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(resp);
+    @PostMapping(
+            path = "/login",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> loginUser() {
+
+        return ResponseEntity.ok("logged in");
     }
 
 

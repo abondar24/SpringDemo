@@ -1,7 +1,7 @@
 package org.abondar.experimental.springsecurity.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.abondar.experimental.springsecurity.model.UserRequest;
+import org.abondar.experimental.springsecurity.model.UserCreateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ public class JwtExpirationTest {
     @Test
     @Disabled
     public void testGetSecret() throws Exception {
-        var req = new UserRequest("test", "test", List.of("user"));
+        var req = new UserCreateRequest("test", "test", List.of("user"));
 
         var json = mapper.writeValueAsString(req);
 
