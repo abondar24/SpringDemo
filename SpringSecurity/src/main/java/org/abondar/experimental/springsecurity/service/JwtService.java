@@ -3,6 +3,7 @@ package org.abondar.experimental.springsecurity.service;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.abondar.experimental.springsecurity.model.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,18 +49,14 @@ public class JwtService {
     }
 
 
-    public String generateToken(String userId) {
-        var userData = userService.find(userId);
-        if (userData.isEmpty()) {
-            return "";
-        }
+    public String generateToken(UserData userData) {
 
         var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         var claims = Map.of(
-                ROLE_CLAIM.getVal(), userData.get().roles(),
+                ROLE_CLAIM.getVal(), userData.roles(),
                 ISS_CLAIM.getVal(), jwtIssuer,
                 AUD_CLAIM.getVal(), jwtAudience,
-                SUB_CLAIM.getVal(), userId,
+                SUB_CLAIM.getVal(), userData.login(),
                 "exp", new Date(System.currentTimeMillis() + expTime));
 
         return Jwts.builder()
@@ -76,7 +73,11 @@ public class JwtService {
         var claims = parser
                 .parseClaimsJws(token).getBody();
 
-        var userId = claims.getSubject();
+        var login = claims.getSubject();
+        var userData = userService.findByUsername(login);
+        if (userData.isEmpty()){
+            return Optional.empty();
+        }
 
         var iss = claims.getIssuer();
         if (!iss.equals(jwtIssuer)){
@@ -88,7 +89,7 @@ public class JwtService {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        var auth = new UsernamePasswordAuthenticationToken(userId, null, grantedAuth);
+        var auth = new UsernamePasswordAuthenticationToken(login, null, grantedAuth);
         return Optional.of(auth);
 
     }
