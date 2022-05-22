@@ -1,6 +1,6 @@
 package org.abondar.experimental.springsecurity.service;
 
-import org.abondar.experimental.springsecurity.model.UserRequest;
+import org.abondar.experimental.springsecurity.model.UserCreateRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +24,7 @@ public class JwtServiceTest {
 
     @Test
     public void generateTokenTest(){
-        var req = new UserRequest("test","test",List.of("test"));
+        var req = new UserCreateRequest("test","test",List.of("test"));
         var resp = userService.addOrUpdateStore(req);
         var token = service.generateToken(resp.id());
 
@@ -34,7 +34,7 @@ public class JwtServiceTest {
 
     @Test
     public void validateTokenTest(){
-        var req = new UserRequest("test","test",List.of("test"));
+        var req = new UserCreateRequest("test","test",List.of("test"));
         var resp = userService.addOrUpdateStore(req);
 
         var token = service.generateToken(resp.id());
