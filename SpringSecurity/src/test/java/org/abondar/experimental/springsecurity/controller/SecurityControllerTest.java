@@ -120,6 +120,34 @@ public class SecurityControllerTest {
     }
 
     @Test
+    public void testGetSecretMultipleRoles() throws Exception {
+        var req = new UserCreateRequest("test21", "test", List.of("user","admin"));
+
+        var json = mapper.writeValueAsString(req);
+
+        mockMvc.perform(post("/security")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        var creds = req.login()+":"+req.password();
+        var basicToken = Base64.getEncoder().encode(creds.getBytes());
+
+        var res = mockMvc.perform(post("/security/login")
+                        .header("Authorization", "Basic "+new String(basicToken)))
+                .andReturn()
+                .getResponse();
+
+        var token = res.getHeader("Authorization");
+
+        mockMvc.perform(get("/security")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is("Secret")));
+
+    }
+
+    @Test
     public void testGetSecretUnauthorized() throws Exception {
         mockMvc.perform(get("/security")
                         .contentType(MediaType.APPLICATION_JSON))
