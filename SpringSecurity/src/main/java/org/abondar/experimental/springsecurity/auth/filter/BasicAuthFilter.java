@@ -60,7 +60,7 @@ public class BasicAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
                 var jwt = jwtService.generateToken(userData.get());
-                response.setHeader("Authorization", "Bearer: " + jwt);
+                response.setHeader("Authorization", "Bearer " + jwt);
             }
 
         } else {

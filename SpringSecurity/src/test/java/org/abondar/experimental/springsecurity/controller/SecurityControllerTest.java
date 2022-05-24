@@ -79,7 +79,7 @@ public class SecurityControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$", is("logged in")))
-                .andExpect(header().string("Authorization", containsString("Bearer: ")));
+                .andExpect(header().string("Authorization", containsString("Bearer ")));
     }
 
     @Test

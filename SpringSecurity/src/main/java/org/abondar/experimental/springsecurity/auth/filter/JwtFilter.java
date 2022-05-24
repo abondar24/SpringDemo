@@ -34,8 +34,8 @@ public class JwtFilter extends OncePerRequestFilter {
         var path = request.getRequestURI();
 
         String token;
-        if (authHeader != null && authHeader.startsWith("Bearer: ")) {
-            token = authHeader.split("Bearer: ")[1];
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            token = authHeader.split("Bearer ")[1];
             try {
                 var auth = jwtService.parseAndValidateToken(token);
                 if (auth.isEmpty()) {
