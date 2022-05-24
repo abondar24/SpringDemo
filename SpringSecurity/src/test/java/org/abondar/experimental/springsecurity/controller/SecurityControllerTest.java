@@ -25,7 +25,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,7 +62,7 @@ public class SecurityControllerTest {
 
     @Test
     public void testLoginUser() throws Exception {
-        var req = new UserCreateRequest("test", "test", List.of("admin"));
+        var req = new UserCreateRequest("test1", "test", List.of("admin"));
 
         var json = mapper.writeValueAsString(req);
 
@@ -72,7 +71,8 @@ public class SecurityControllerTest {
                         .content(json))
                 .andExpect(status().isOk());
 
-        var basicToken = Base64.getEncoder().encode("test:test".getBytes());
+        var creds = req.login()+":"+req.password();
+        var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
         mockMvc.perform(post("/security/login")
                         .header("Authorization", "Basic "+new String(basicToken)))
@@ -93,7 +93,7 @@ public class SecurityControllerTest {
 
     @Test
     public void testGetSecret() throws Exception {
-        var req = new UserCreateRequest("test", "test", List.of("admin"));
+        var req = new UserCreateRequest("test2", "test", List.of("user"));
 
         var json = mapper.writeValueAsString(req);
 
@@ -101,7 +101,8 @@ public class SecurityControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json));
 
-        var basicToken = Base64.getEncoder().encode("test:test".getBytes());
+        var creds = req.login()+":"+req.password();
+        var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
         var res = mockMvc.perform(post("/security/login")
                         .header("Authorization", "Basic "+new String(basicToken)))
@@ -127,7 +128,6 @@ public class SecurityControllerTest {
     }
 
     @Test
-    @Disabled
     public void testGetSecretWrongToken() throws Exception {
         mockMvc.perform(get("/security")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -138,7 +138,7 @@ public class SecurityControllerTest {
 
     @Test
     public void testGetSecretWrongRole() throws Exception {
-        var req = new UserCreateRequest("test", "test", List.of("admin"));
+        var req = new UserCreateRequest("test3", "test", List.of("admin"));
 
         var json = mapper.writeValueAsString(req);
 
@@ -146,7 +146,8 @@ public class SecurityControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json));
 
-        var basicToken = Base64.getEncoder().encode("test:test".getBytes());
+        var creds = req.login()+":"+req.password();
+        var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
         var res = mockMvc.perform(post("/security/login")
                         .header("Authorization", "Basic "+new String(basicToken)))
@@ -164,15 +165,20 @@ public class SecurityControllerTest {
     }
 
     @Test
-    @Disabled
     public void testGetUltra() throws Exception {
-        var req = new UserCreateRequest("test", "test", List.of("admin"));
+        var req = new UserCreateRequest("test4", "test", List.of("admin"));
 
         var json = mapper.writeValueAsString(req);
 
-        var res = mockMvc.perform(post("/security")
+        mockMvc.perform(post("/security")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
+                        .content(json));
+
+        var creds = req.login()+":"+req.password();
+        var basicToken = Base64.getEncoder().encode(creds.getBytes());
+
+        var res = mockMvc.perform(post("/security/login")
+                        .header("Authorization", "Basic "+new String(basicToken)))
                 .andReturn()
                 .getResponse();
 
@@ -188,7 +194,7 @@ public class SecurityControllerTest {
 
     @Test
     public void testDelete() throws Exception {
-        var req = new UserCreateRequest("test", "test", List.of("admin"));
+        var req = new UserCreateRequest("test5", "test", List.of("admin"));
 
         var json = mapper.writeValueAsString(req);
 
@@ -201,7 +207,8 @@ public class SecurityControllerTest {
 
         var data = mapper.readValue(created, UserResponse.class);
 
-        var basicToken = Base64.getEncoder().encode("test:test".getBytes());
+        var creds = req.login()+":"+req.password();
+        var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
         var res = mockMvc.perform(post("/security/login")
                         .header("Authorization", "Basic "+new String(basicToken)))

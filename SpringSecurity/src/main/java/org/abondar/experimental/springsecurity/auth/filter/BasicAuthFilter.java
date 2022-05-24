@@ -45,7 +45,6 @@ public class BasicAuthFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Basic ")) {
             var token = authHeader.split("Basic ")[1];
             var credentials = parseAuthToken(token);
-            System.out.println(2);
             var userData = userService.findByUsername(credentials[0]);
             if (userData.isEmpty()) {
                 logger.error("User not found");

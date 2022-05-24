@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -75,12 +74,12 @@ public class JwtService {
 
         var login = claims.getSubject();
         var userData = userService.findByUsername(login);
-        if (userData.isEmpty()){
+        if (userData.isEmpty()) {
             return Optional.empty();
         }
 
         var iss = claims.getIssuer();
-        if (!iss.equals(jwtIssuer)){
+        if (!iss.equals(jwtIssuer)) {
             return Optional.empty();
         }
 
@@ -91,11 +90,6 @@ public class JwtService {
 
         var auth = new UsernamePasswordAuthenticationToken(login, null, grantedAuth);
         return Optional.of(auth);
-
-    }
-
-    private boolean rolesContained(List<String> storedRoles, List<String> tokenRoles) {
-        return storedRoles.stream().anyMatch(new HashSet<>(tokenRoles)::contains);
 
     }
 

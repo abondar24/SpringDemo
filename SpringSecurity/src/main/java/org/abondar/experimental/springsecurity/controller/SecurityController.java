@@ -2,21 +2,20 @@ package org.abondar.experimental.springsecurity.controller;
 
 import org.abondar.experimental.springsecurity.model.UserCreateRequest;
 import org.abondar.experimental.springsecurity.model.UserResponse;
-import org.abondar.experimental.springsecurity.service.JwtService;
 import org.abondar.experimental.springsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.Optional;
 
 
@@ -57,7 +56,7 @@ public class SecurityController {
 
     @GetMapping(
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @RolesAllowed("user")
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<String> getSecret() {
 
         return ResponseEntity.ok("Secret");
@@ -66,7 +65,7 @@ public class SecurityController {
     @GetMapping(
             path = "/ultra",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @RolesAllowed("admin")
+    @PreAuthorize("hasRole('admin')")
     public ResponseEntity<String> getUltraSecret() {
 
         return ResponseEntity.ok("Ultrasecret");
