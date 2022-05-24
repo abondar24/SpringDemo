@@ -31,6 +31,8 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var authHeader = request.getHeader("Authorization");
 
+        var path = request.getRequestURI();
+
         String token;
         if (authHeader != null && authHeader.startsWith("Bearer: ")) {
             token = authHeader.split("Bearer: ")[1];
@@ -42,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
 
                 SecurityContextHolder.getContext().setAuthentication(auth.get());
-            } catch (MalformedJwtException ex){
+            } catch (MalformedJwtException ex) {
                 logger.error(ex.getMessage());
             }
 
@@ -50,8 +52,8 @@ public class JwtFilter extends OncePerRequestFilter {
             logger.error("Invalid auth header");
         }
 
+
         filterChain.doFilter(request, response);
     }
-
 
 }

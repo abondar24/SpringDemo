@@ -7,12 +7,11 @@ import org.abondar.experimental.springsecurity.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 @Component
-public class BasicAuthFilter extends BasicAuthenticationFilter {
+public class BasicAuthFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(BasicAuthFilter.class);
 
@@ -33,8 +32,7 @@ public class BasicAuthFilter extends BasicAuthenticationFilter {
     private JwtService jwtService;
 
     @Autowired
-    public BasicAuthFilter(AuthenticationManager authenticationManager, UserService userService, JwtService jwtService) {
-        super(authenticationManager);
+    public BasicAuthFilter(UserService userService, JwtService jwtService) {
         this.userService = userService;
         this.jwtService = jwtService;
     }
@@ -42,38 +40,32 @@ public class BasicAuthFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        var path = request.getContextPath();
-        if (path.contains("/login")) {
-            var authHeader = request.getHeader("Authorization");
+        var authHeader = request.getHeader("Authorization");
 
-            if (authHeader != null && authHeader.startsWith("Basic: ")) {
-                var token = authHeader.split("Basic ")[1];
-                var credentials = parseAuthToken(token);
-
-                var userData = userService.findByUsername(credentials[0]);
-                if (userData.isEmpty()) {
-                    logger.error("User not found");
-                }
-
+        if (authHeader != null && authHeader.startsWith("Basic ")) {
+            var token = authHeader.split("Basic ")[1];
+            var credentials = parseAuthToken(token);
+            System.out.println(2);
+            var userData = userService.findByUsername(credentials[0]);
+            if (userData.isEmpty()) {
+                logger.error("User not found");
+            } else {
                 var pwdHash = userData.get().hash();
                 if (!PasswordUtil.verifyPassword(credentials[1], pwdHash)) {
                     logger.error("Wrong password");
                     throw new PasswordException("Wrong password");
                 }
 
-
                 Authentication auth = new UsernamePasswordAuthenticationToken(credentials[0], credentials[1], null);
 
-                auth = getAuthenticationManager().authenticate(auth);
                 SecurityContextHolder.getContext().setAuthentication(auth);
-                getAuthenticationManager().authenticate(auth);
 
                 var jwt = jwtService.generateToken(userData.get());
                 response.setHeader("Authorization", "Bearer: " + jwt);
-            } else {
-                logger.error("Missing auth");
             }
 
+        } else {
+            logger.error("Missing auth");
         }
 
         filterChain.doFilter(request, response);

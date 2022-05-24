@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +23,7 @@ import java.util.Optional;
 //TODO: oauth2 integration
 //TODO: swagger integration
 //TODO: make constant util
-//TODO: test jwt expiration
-//TODO: basic auth filter
+//TODO: test jwt expiration + enable refresh token
 //TODO: multifactor auth integaration
 @RestController
 @RequestMapping("/security")
@@ -31,12 +31,9 @@ public class SecurityController {
 
     private final UserService service;
 
-    private final JwtService jwtService;
-
     @Autowired
-    public SecurityController(UserService service, JwtService jwtService) {
+    public SecurityController(UserService service) {
         this.service = service;
-        this.jwtService = jwtService;
     }
 
 
@@ -51,7 +48,6 @@ public class SecurityController {
 
     @PostMapping(
             path = "/login",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> loginUser() {
 

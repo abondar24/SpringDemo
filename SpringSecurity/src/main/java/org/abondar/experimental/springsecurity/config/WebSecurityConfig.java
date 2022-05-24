@@ -21,60 +21,21 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-
-    @Bean
-    GrantedAuthorityDefaults grantedAuthorityDefaults() {
-        return new GrantedAuthorityDefaults("");
-    }
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManager() throws Exception{
-        return super.authenticationManagerBean();
-    }
-
-
-    @Order(1)
-    @Configuration
-    public static class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
-        @Autowired
-        private BasicAuthFilter basicFilter;
-
-        @Autowired
-        private AuthEntryPoint entryPoint;
-
-
-
-        @Override
-        protected void configure(HttpSecurity httpSecurity) throws Exception {
-            httpSecurity.addFilterBefore(basicFilter,BasicAuthenticationFilter.class)
-                    .antMatcher("/security/login")
-                    .csrf()
-                    .and()
-                    .cors()
-                    .disable()
-                    .authorizeRequests()
-                    .anyRequest()
-                    .authenticated()
-                    .and()
-                    .httpBasic()
-                    .authenticationEntryPoint(entryPoint)
-                    .and()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        }
-    }
+public class WebSecurityConfig  {
 
     @Order(2)
     @Configuration
-    public static class JwtSecurityConfig extends WebSecurityConfigurerAdapter{
+    public static class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         private JwtFilter jwtFilter;
 
         @Autowired
         private AuthEntryPoint entryPoint;
+
+        @Bean
+        GrantedAuthorityDefaults grantedAuthorityDefaults() {
+            return new GrantedAuthorityDefaults("");
+        }
 
 
         @Override
@@ -86,8 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .csrf()
                     .disable()
                     .authorizeRequests()
-                    .antMatchers(HttpMethod.POST,"/security")
-                    .permitAll()
                     .antMatchers(HttpMethod.GET,"/security")
                     .hasRole("user")
                     .antMatchers("/security/ultra")
@@ -108,6 +67,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    @Order(1)
+    @Configuration
+    public static class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
+        @Autowired
+        private BasicAuthFilter basicFilter;
 
+        @Autowired
+        private AuthEntryPoint entryPoint;
+
+
+        @Override
+        protected void configure(HttpSecurity httpSecurity) throws Exception {
+
+            httpSecurity
+                    .addFilterBefore(basicFilter,BasicAuthenticationFilter.class)
+                    .cors()
+                    .and()
+                    .csrf()
+                    .disable()
+                    .authorizeRequests()
+                    .antMatchers("/security")
+                    .permitAll()
+                    .antMatchers(HttpMethod.POST, "/security/login")
+                    .authenticated()
+                    .and()
+                    .httpBasic()
+                    .and()
+                    .exceptionHandling()
+                    .authenticationEntryPoint(entryPoint)
+                    .and();
+
+        }
+    }
 
 }
