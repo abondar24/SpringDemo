@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 
-//TODO: oauth2 integration
 //TODO: swagger integration
 //TODO: make constant util
-//TODO: test jwt expiration + enable refresh token
+//TODO: enable refresh token
+//TODO: oauth2 integration
 //TODO: multifactor auth integaration
 @RestController
 @RequestMapping("/security")

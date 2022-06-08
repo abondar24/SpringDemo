@@ -16,6 +16,11 @@ public class AuthEntryPoint implements AuthenticationEntryPoint, Serializable {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-          response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        if (response.getStatus()==406){
+            response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+        } else {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package org.abondar.experimental.springsecurity.auth.filter;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import org.abondar.experimental.springsecurity.service.JwtService;
 import org.slf4j.Logger;
@@ -31,7 +32,6 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         var authHeader = request.getHeader("Authorization");
 
-        var path = request.getRequestURI();
 
         String token;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -46,6 +46,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth.get());
             } catch (MalformedJwtException ex) {
                 logger.error(ex.getMessage());
+            } catch (ExpiredJwtException ex){
+                logger.error(ex.getMessage());
+                response.setStatus(406);
             }
 
         } else {

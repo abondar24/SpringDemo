@@ -60,8 +60,6 @@ public class UserServiceTest {
         assertTrue(foundById.isPresent());
         assertTrue(foundByName.isPresent());
         assertEquals(foundById.get().login(),foundByName.get().login());
-        assertEquals(foundById.get().hash(),foundByName.get().hash());
-
     }
 
     @Test

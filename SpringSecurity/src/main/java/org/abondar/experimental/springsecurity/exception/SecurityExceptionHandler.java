@@ -11,10 +11,6 @@ import java.io.IOException;
 @ControllerAdvice
 public class SecurityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ExpiredJwtException.class)
-    public void handleExpiredToken(Exception ex, HttpServletResponse response) throws IOException {
-        response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,ex.getMessage());
-    }
 
     @ExceptionHandler(PasswordException.class)
     public void handlePassword(Exception ex, HttpServletResponse response) throws IOException {
