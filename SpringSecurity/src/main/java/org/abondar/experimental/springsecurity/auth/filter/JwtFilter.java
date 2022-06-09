@@ -6,6 +6,8 @@ import org.abondar.experimental.springsecurity.service.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -46,15 +48,23 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth.get());
             } catch (MalformedJwtException ex) {
                 logger.error(ex.getMessage());
-            } catch (ExpiredJwtException ex){
-                logger.error(ex.getMessage());
-                response.setStatus(406);
-            }
+            } catch (ExpiredJwtException ex) {
+                var path = request.getRequestURI();
+                if (path.contains("refresh")) {
+                    var refresh = jwtService.generateRefresh(ex.getClaims());
+                    var auth = jwtService.parseAndValidateToken(refresh);
+                    SecurityContextHolder.getContext().setAuthentication(auth.get());
 
+                    response.setHeader("Authorization", "Bearer " + refresh);
+                    response.setStatus(200);
+                }  else {
+                    response.setStatus(406);
+                }
+
+            }
         } else {
             logger.error("Invalid auth header");
         }
-
 
         filterChain.doFilter(request, response);
     }

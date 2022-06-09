@@ -20,7 +20,6 @@ import java.util.Optional;
 
 //TODO: swagger integration
 //TODO: make constant util
-//TODO: enable refresh token
 //TODO: oauth2 integration
 //TODO: multifactor auth integaration
 @RestController
@@ -50,6 +49,15 @@ public class SecurityController {
     public ResponseEntity<String> loginUser() {
 
         return ResponseEntity.ok("logged in");
+    }
+
+
+    @PostMapping(
+            path = "/refresh",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> refreshToken() {
+
+        return ResponseEntity.ok("Token refreshed");
     }
 
 

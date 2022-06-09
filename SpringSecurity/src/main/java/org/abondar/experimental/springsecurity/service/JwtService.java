@@ -1,5 +1,6 @@
 package org.abondar.experimental.springsecurity.service;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -39,6 +40,9 @@ public class JwtService {
 
     @Value("${jwt.expTime}")
     private long expTime;
+
+    @Value("${jwt.refreshExp}")
+    private long refreshExpTime;
 
     private final UserService userService;
 
@@ -93,6 +97,16 @@ public class JwtService {
 
     }
 
+    public String generateRefresh(Claims claims){
+        claims.setExpiration( new Date(System.currentTimeMillis() + refreshExpTime));
+        var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+
+        return Jwts.builder()
+                .signWith(secretKey)
+                .setHeaderParam("typ", jwtType)
+                .setClaims(claims)
+                .compact();
+    }
 
     private JwtParser getParser() {
         var secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));

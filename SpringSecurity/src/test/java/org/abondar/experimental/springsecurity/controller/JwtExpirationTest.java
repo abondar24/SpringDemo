@@ -16,13 +16,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Base64;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(properties = {"jwt.expTime=1"})
+@SpringBootTest(properties = {"jwt.expTime=10"})
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 public class JwtExpirationTest {
@@ -39,7 +41,7 @@ public class JwtExpirationTest {
     }
 
     @Test
-    public void testGetSecret() throws Exception {
+    public void testExpiration() throws Exception {
         var req = new UserCreateRequest("test", "test", List.of("user"));
 
         var json = mapper.writeValueAsString(req);
@@ -62,6 +64,38 @@ public class JwtExpirationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", token))
                 .andExpect(status().is(406));
+
+    }
+
+
+    @Test
+    public void testRefresh() throws Exception {
+        var req = new UserCreateRequest("test", "test", List.of("user"));
+
+        var json = mapper.writeValueAsString(req);
+
+        mockMvc.perform(post("/security")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
+
+        var creds = req.login() + ":" + req.password();
+        var basicToken = Base64.getEncoder().encode(creds.getBytes());
+
+        var resp =
+                mockMvc.perform(post("/security/login")
+                                .header("Authorization", "Basic "+new String(basicToken)))
+                        .andReturn()
+                        .getResponse();
+        System.out.println(resp.containsHeader("Authorization"));
+        var token = resp.getHeader("Authorization");
+        System.out.println(token);
+
+
+        mockMvc.perform(post("/security/refresh")
+                        .header("Authorization", token))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Authorization", containsString("Bearer ")))
+                .andExpect(jsonPath("$", is("Token refreshed")));
 
     }
 }

@@ -4,3 +4,4 @@ jwt:
   type: JWT
   audience: SecurityApp
   expTime: 36000
+  refreshExp: 48000
