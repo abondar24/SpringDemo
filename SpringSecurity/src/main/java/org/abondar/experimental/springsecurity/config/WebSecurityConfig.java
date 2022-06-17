@@ -4,6 +4,7 @@ import org.abondar.experimental.springsecurity.auth.AuthEntryPoint;
 import org.abondar.experimental.springsecurity.auth.filter.BasicAuthFilter;
 import org.abondar.experimental.springsecurity.auth.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -14,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -71,6 +74,12 @@ public class WebSecurityConfig  {
             return new GrantedAuthorityDefaults("");
         }
 
+        @Bean
+        public JwtDecoder nimbusJwtDecoder() {
+            return NimbusJwtDecoder
+                    .withJwkSetUri("http://localhost:8080/realms/spring/protocol/openid-connect/certs")
+                    .build();
+        }
 
         @Override
         protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -90,8 +99,12 @@ public class WebSecurityConfig  {
                     .anyRequest()
                     .authenticated()
                     .and()
-                    .exceptionHandling()
+                    .oauth2ResourceServer()
+                    .jwt().decoder(nimbusJwtDecoder())
+                    .and()
                     .authenticationEntryPoint(entryPoint)
+                    .and()
+                    .exceptionHandling()
                     .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
