@@ -44,7 +44,7 @@ public class JwtServiceTest {
         var authentication = service.parseAndValidateToken(token);
 
         assertTrue(authentication.isPresent());
-        assertEquals(data.get().login(), authentication.get().getPrincipal());
+        assertEquals(data.get().id(), authentication.get().getPrincipal());
     }
 
 

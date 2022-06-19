@@ -59,7 +59,7 @@ public class JwtService {
                 ROLE_CLAIM.getVal(), userData.roles(),
                 ISS_CLAIM.getVal(), jwtIssuer,
                 AUD_CLAIM.getVal(), jwtAudience,
-                SUB_CLAIM.getVal(), userData.login(),
+                SUB_CLAIM.getVal(), userData.id(),
                 "exp", new Date(System.currentTimeMillis() + expTime));
 
         return Jwts.builder()
@@ -76,8 +76,8 @@ public class JwtService {
         var claims = parser
                 .parseClaimsJws(token).getBody();
 
-        var login = claims.getSubject();
-        var userData = userService.findByUsername(login);
+        var userId = claims.getSubject();
+        var userData = userService.find(userId);
         if (userData.isEmpty()) {
             return Optional.empty();
         }
@@ -92,7 +92,7 @@ public class JwtService {
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        var auth = new UsernamePasswordAuthenticationToken(login, null, grantedAuth);
+        var auth = new UsernamePasswordAuthenticationToken(userId, null, grantedAuth);
         return Optional.of(auth);
 
     }
