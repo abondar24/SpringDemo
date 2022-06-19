@@ -20,8 +20,7 @@ import java.util.Optional;
 
 //TODO: swagger integration
 //TODO: make constant util
-//TODO: oauth2 integration
-//TODO: add generated userId to sub claim of JWT
+//TODO: separate oauth2 security config and filter from jwt
 @RestController
 @RequestMapping("/security")
 public class SecurityController {

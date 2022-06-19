@@ -74,12 +74,12 @@ public class WebSecurityConfig  {
             return new GrantedAuthorityDefaults("");
         }
 
-        @Bean
-        public JwtDecoder nimbusJwtDecoder() {
-            return NimbusJwtDecoder
-                    .withJwkSetUri("http://localhost:8080/realms/spring/protocol/openid-connect/certs")
-                    .build();
-        }
+//        @Bean
+//        public JwtDecoder nimbusJwtDecoder() {
+//            return NimbusJwtDecoder
+//                    .withJwkSetUri("http://localhost:8080/realms/spring/protocol/openid-connect/certs")
+//                    .build();
+//        }
 
         @Override
         protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -100,7 +100,7 @@ public class WebSecurityConfig  {
                     .authenticated()
                     .and()
                     .oauth2ResourceServer()
-                    .jwt().decoder(nimbusJwtDecoder())
+                    .jwt()
                     .and()
                     .authenticationEntryPoint(entryPoint)
                     .and()

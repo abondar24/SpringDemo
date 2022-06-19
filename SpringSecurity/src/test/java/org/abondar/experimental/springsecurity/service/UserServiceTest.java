@@ -1,6 +1,7 @@
 package org.abondar.experimental.springsecurity.service;
 
 import org.abondar.experimental.springsecurity.model.UserCreateRequest;
+import org.abondar.experimental.springsecurity.model.UserOauthRequest;
 import org.abondar.experimental.springsecurity.util.PasswordUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,19 @@ public class UserServiceTest {
 
         var pwdValid = PasswordUtil.verifyPassword("test",res.get().hash());
         assertTrue(pwdValid);
+    }
+
+    @Test
+    public void addNewOauthUserTest(){
+        var usr= new UserOauthRequest("test", List.of());
+
+        var data = userService.addOrUpdateStore(usr);
+        assertNotNull(data);
+
+        var res = userService.find(data.id());
+
+        assertTrue(res.isPresent());
+        assertEquals(usr.sub(),res.get().login());
     }
 
     @Test

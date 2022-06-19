@@ -2,6 +2,7 @@ package org.abondar.experimental.springsecurity.service;
 
 import org.abondar.experimental.springsecurity.model.UserData;
 import org.abondar.experimental.springsecurity.model.UserCreateRequest;
+import org.abondar.experimental.springsecurity.model.UserOauthRequest;
 import org.abondar.experimental.springsecurity.model.UserResponse;
 import org.abondar.experimental.springsecurity.util.PasswordUtil;
 import org.springframework.stereotype.Service;
@@ -21,26 +22,33 @@ public class UserService {
     }
 
     public UserResponse addOrUpdateStore(UserCreateRequest userCreateRequest) {
+        var id = generateId(userCreateRequest.login());
         var hash = PasswordUtil.createHash(userCreateRequest.password());
-        var existingData = findByUsername(userCreateRequest.login());
-        var id = "";
-        UserData data;
-        if (existingData.isPresent()){
-            id = existingData.get().id();
-        } else {
-            id = UUID.randomUUID().toString();
-        }
-        data = new UserData(id,userCreateRequest.login(),hash, userCreateRequest.roles());
+        var data = new UserData(id,userCreateRequest.login(),hash, userCreateRequest.roles());
         userDataStore.put(id,data);
 
         return new UserResponse(id);
     }
 
-//    public String addOrUpdateStore(UserData data){
-//        var id = UUID.randomUUID().toString();
-//        userDataStore.put(id,data);
-//        return id;
-//    }
+    public UserData
+    addOrUpdateStore(UserOauthRequest request){
+        var id = generateId(request.sub());
+        var data = new UserData(id,request.sub(),"", request.roles());
+        userDataStore.put(id,data);
+
+        return data;
+    }
+
+    private String generateId(String username){
+        var existingData = findByUsername(username);
+        var id="";
+        if (existingData.isPresent()){
+            id = existingData.get().id();
+        } else {
+            id = UUID.randomUUID().toString();
+        }
+        return id;
+    }
 
 
     public Optional<UserData> find(String id) {
