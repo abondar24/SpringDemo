@@ -20,7 +20,7 @@ import java.util.Optional;
 
 //TODO: swagger integration
 //TODO: make constant util
-//TODO: separate oauth2 security config and filter from jwt
+//TODO: oauth filter test with mocked nimbus decoder
 @RestController
 @RequestMapping("/security")
 public class SecurityController {

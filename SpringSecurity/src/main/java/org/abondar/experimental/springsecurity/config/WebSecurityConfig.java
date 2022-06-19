@@ -3,6 +3,7 @@ package org.abondar.experimental.springsecurity.config;
 import org.abondar.experimental.springsecurity.auth.AuthEntryPoint;
 import org.abondar.experimental.springsecurity.auth.filter.BasicAuthFilter;
 import org.abondar.experimental.springsecurity.auth.filter.JwtFilter;
+import org.abondar.experimental.springsecurity.auth.filter.OauthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -73,13 +74,6 @@ public class WebSecurityConfig  {
         GrantedAuthorityDefaults grantedAuthorityDefaults() {
             return new GrantedAuthorityDefaults("");
         }
-
-//        @Bean
-//        public JwtDecoder nimbusJwtDecoder() {
-//            return NimbusJwtDecoder
-//                    .withJwkSetUri("http://localhost:8080/realms/spring/protocol/openid-connect/certs")
-//                    .build();
-//        }
 
         @Override
         protected void configure(HttpSecurity httpSecurity) throws Exception {
