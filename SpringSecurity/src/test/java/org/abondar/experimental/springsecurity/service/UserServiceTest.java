@@ -38,14 +38,14 @@ public class UserServiceTest {
         var usr= new UserCreateRequest("test","test",List.of());
         userService.addOrUpdateStore(usr);
 
-        usr= new UserCreateRequest("test","test1",List.of());
         var resp =userService.addOrUpdateStore(usr);
 
         var res = userService.find(resp.id());
         assertTrue(res.isPresent());
+        assertEquals(res.get().id(),resp.id());
         assertEquals(usr.login(),res.get().login());
 
-        var pwdValid = PasswordUtil.verifyPassword("test1",res.get().hash());
+        var pwdValid = PasswordUtil.verifyPassword("test",res.get().hash());
         assertTrue(pwdValid);
     }
 

@@ -22,11 +22,25 @@ public class UserService {
 
     public UserResponse addOrUpdateStore(UserCreateRequest userCreateRequest) {
         var hash = PasswordUtil.createHash(userCreateRequest.password());
-        var id = UUID.randomUUID().toString();
-        userDataStore.put(id,new UserData(userCreateRequest.login(),hash, userCreateRequest.roles()));
+        var existingData = findByUsername(userCreateRequest.login());
+        var id = "";
+        UserData data;
+        if (existingData.isPresent()){
+            id = existingData.get().id();
+        } else {
+            id = UUID.randomUUID().toString();
+        }
+        data = new UserData(id,userCreateRequest.login(),hash, userCreateRequest.roles());
+        userDataStore.put(id,data);
 
-        return new UserResponse(id)
-;    }
+        return new UserResponse(id);
+    }
+
+//    public String addOrUpdateStore(UserData data){
+//        var id = UUID.randomUUID().toString();
+//        userDataStore.put(id,data);
+//        return id;
+//    }
 
 
     public Optional<UserData> find(String id) {
