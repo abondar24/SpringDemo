@@ -20,7 +20,6 @@ import java.util.Optional;
 
 //TODO: swagger integration
 //TODO: make constant util
-//TODO: oauth filter test with mocked nimbus decoder
 @RestController
 @RequestMapping("/security")
 public class SecurityController {
