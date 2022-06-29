@@ -7,6 +7,7 @@ import org.abondar.experimental.springsecurity.model.UserData;
 import org.abondar.experimental.springsecurity.model.UserOauthRequest;
 import org.abondar.experimental.springsecurity.service.JwtService;
 import org.abondar.experimental.springsecurity.service.UserService;
+import org.abondar.experimental.springsecurity.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,11 +36,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var authHeader = request.getHeader("Authorization");
+        var authHeader = request.getHeader(HeaderUtil.AUTH_HEADER);
 
         String token;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            token = authHeader.split("Bearer ")[1];
+        if (authHeader != null && authHeader.startsWith(HeaderUtil.BEARER_PREFIX)) {
+            token = authHeader.split(HeaderUtil.BEARER_PREFIX)[1];
             try {
                 var auth = jwtService.parseAndValidateToken(token);
                 if (auth.isEmpty()) {
@@ -55,7 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     var auth = jwtService.parseAndValidateToken(refresh);
                     SecurityContextHolder.getContext().setAuthentication(auth.get());
 
-                    response.setHeader("Authorization", "Bearer " + refresh);
+                    response.setHeader(HeaderUtil.AUTH_HEADER, HeaderUtil.BEARER_PREFIX + refresh);
                     response.setStatus(200);
                 }  else {
                     response.setStatus(406);

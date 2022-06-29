@@ -3,9 +3,9 @@ package org.abondar.experimental.springsecurity.config;
 import org.abondar.experimental.springsecurity.auth.AuthEntryPoint;
 import org.abondar.experimental.springsecurity.auth.filter.BasicAuthFilter;
 import org.abondar.experimental.springsecurity.auth.filter.JwtFilter;
-import org.abondar.experimental.springsecurity.auth.filter.OauthFilter;
+import org.abondar.experimental.springsecurity.util.EndpointUtil;
+import org.abondar.experimental.springsecurity.util.RoleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -16,15 +16,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig  {
+public class WebSecurityConfig {
 
     @Order(1)
     @Configuration
@@ -40,15 +38,15 @@ public class WebSecurityConfig  {
         protected void configure(HttpSecurity httpSecurity) throws Exception {
 
             httpSecurity
-                    .addFilterBefore(basicFilter,BasicAuthenticationFilter.class)
+                    .addFilterBefore(basicFilter, BasicAuthenticationFilter.class)
                     .cors()
                     .and()
                     .csrf()
                     .disable()
                     .authorizeRequests()
-                    .antMatchers("/security")
+                    .antMatchers(EndpointUtil.SECURITY_PATH)
                     .permitAll()
-                    .antMatchers(HttpMethod.POST, "/security/login")
+                    .antMatchers(HttpMethod.POST, EndpointUtil.SECURITY_PATH+EndpointUtil.LOGIN_PATH)
                     .authenticated()
                     .and()
                     .httpBasic()
@@ -84,12 +82,12 @@ public class WebSecurityConfig  {
                     .csrf()
                     .disable()
                     .authorizeRequests()
-                    .antMatchers("/security/secret")
-                    .hasRole("user")
-                    .antMatchers("/security/ultra")
-                    .hasRole("admin")
-                    .antMatchers(HttpMethod.DELETE,"/security/*")
-                    .hasAnyRole("user","admin")
+                    .antMatchers(HttpMethod.GET,EndpointUtil.SECURITY_PATH)
+                    .hasRole(RoleUtil.ROLE_USER)
+                    .antMatchers(EndpointUtil.SECURITY_PATH+EndpointUtil.ULTRA_PATH)
+                    .hasRole(RoleUtil.ROLE_ADMIN)
+                    .antMatchers(HttpMethod.DELETE, EndpointUtil.SECURITY_PATH+"/*")
+                    .hasAnyRole(RoleUtil.ROLE_USER, RoleUtil.ROLE_ADMIN)
                     .anyRequest()
                     .authenticated()
                     .and()

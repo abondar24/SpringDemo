@@ -3,6 +3,7 @@ package org.abondar.experimental.springsecurity.controller;
 import org.abondar.experimental.springsecurity.model.UserCreateRequest;
 import org.abondar.experimental.springsecurity.model.UserResponse;
 import org.abondar.experimental.springsecurity.service.UserService;
+import org.abondar.experimental.springsecurity.util.EndpointUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,8 @@ import java.util.Optional;
 
 
 //TODO: swagger integration
-//TODO: make constant util
 @RestController
-@RequestMapping("/security")
+@RequestMapping(EndpointUtil.SECURITY_PATH)
 public class SecurityController {
 
     private final UserService service;
@@ -42,7 +42,7 @@ public class SecurityController {
     }
 
     @PostMapping(
-            path = "/login",
+            path = EndpointUtil.LOGIN_PATH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> loginUser() {
 
@@ -51,7 +51,7 @@ public class SecurityController {
 
 
     @PostMapping(
-            path = "/refresh",
+            path = EndpointUtil.REFRESH_PATH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> refreshToken() {
 
@@ -68,7 +68,7 @@ public class SecurityController {
     }
 
     @GetMapping(
-            path = "/ultra",
+            path = EndpointUtil.ULTRA_PATH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<String> getUltraSecret() {
@@ -77,7 +77,7 @@ public class SecurityController {
     }
 
     @DeleteMapping(
-            path = "/{id}",
+            path = EndpointUtil.ID_PATH,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteUser(@PathVariable String id) {
         service.delete(id);

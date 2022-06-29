@@ -2,10 +2,10 @@ package org.abondar.experimental.springsecurity.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.abondar.experimental.springsecurity.model.UserCreateRequest;
-import org.abondar.experimental.springsecurity.model.UserData;
 import org.abondar.experimental.springsecurity.model.UserResponse;
+import org.abondar.experimental.springsecurity.util.EndpointUtil;
+import org.abondar.experimental.springsecurity.util.HeaderUtil;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class SecurityControllerTest {
 
         var json = mapper.writeValueAsString(req);
 
-        mockMvc.perform(post("/security")
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
@@ -66,28 +66,28 @@ public class SecurityControllerTest {
 
         var json = mapper.writeValueAsString(req);
 
-        mockMvc.perform(post("/security")
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk());
 
-        var creds = req.login()+":"+req.password();
+        var creds = req.login() + ":" + req.password();
         var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
-        mockMvc.perform(post("/security/login")
-                        .header("Authorization", "Basic "+new String(basicToken)))
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH + EndpointUtil.LOGIN_PATH)
+                        .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX + new String(basicToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", notNullValue()))
                 .andExpect(jsonPath("$", is("logged in")))
-                .andExpect(header().string("Authorization", containsString("Bearer ")));
+                .andExpect(header().string(HeaderUtil.AUTH_HEADER, containsString(HeaderUtil.BEARER_PREFIX)));
     }
 
     @Test
     public void testLoginUserUnauthorized() throws Exception {
         var basicToken = Base64.getEncoder().encode("test:test".getBytes());
 
-        mockMvc.perform(post("/security/login")
-                        .header("Authorization", "Basic "+new String(basicToken)))
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH + EndpointUtil.LOGIN_PATH)
+                        .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX + new String(basicToken)))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -97,23 +97,23 @@ public class SecurityControllerTest {
 
         var json = mapper.writeValueAsString(req);
 
-        mockMvc.perform(post("/security")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json));
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
 
-        var creds = req.login()+":"+req.password();
+        var creds = req.login() + ":" + req.password();
         var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
-        var res = mockMvc.perform(post("/security/login")
-                        .header("Authorization", "Basic "+new String(basicToken)))
+        var res = mockMvc.perform(post(EndpointUtil.SECURITY_PATH + EndpointUtil.LOGIN_PATH)
+                        .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX + new String(basicToken)))
                 .andReturn()
                 .getResponse();
 
-        var token = res.getHeader("Authorization");
+        var token = res.getHeader(HeaderUtil.AUTH_HEADER);
 
-        mockMvc.perform(get("/security")
+        mockMvc.perform(get(EndpointUtil.SECURITY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", token))
+                        .header(HeaderUtil.AUTH_HEADER, token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is("Secret")));
 
@@ -121,27 +121,27 @@ public class SecurityControllerTest {
 
     @Test
     public void testGetSecretMultipleRoles() throws Exception {
-        var req = new UserCreateRequest("test21", "test", List.of("user","admin"));
+        var req = new UserCreateRequest("test21", "test", List.of("user", "admin"));
 
         var json = mapper.writeValueAsString(req);
 
-        mockMvc.perform(post("/security")
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
 
-        var creds = req.login()+":"+req.password();
+        var creds = req.login() + ":" + req.password();
         var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
         var res = mockMvc.perform(post("/security/login")
-                        .header("Authorization", "Basic "+new String(basicToken)))
+                        .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX + new String(basicToken)))
                 .andReturn()
                 .getResponse();
 
-        var token = res.getHeader("Authorization");
+        var token = res.getHeader(HeaderUtil.AUTH_HEADER);
 
-        mockMvc.perform(get("/security")
+        mockMvc.perform(get(EndpointUtil.SECURITY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", token))
+                        .header(HeaderUtil.AUTH_HEADER, token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is("Secret")));
 
@@ -149,7 +149,7 @@ public class SecurityControllerTest {
 
     @Test
     public void testGetSecretUnauthorized() throws Exception {
-        mockMvc.perform(get("/security")
+        mockMvc.perform(get(EndpointUtil.SECURITY_PATH)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
 
@@ -157,9 +157,9 @@ public class SecurityControllerTest {
 
     @Test
     public void testGetSecretWrongToken() throws Exception {
-        mockMvc.perform(get("/security")
+        mockMvc.perform(get(EndpointUtil.SECURITY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization","Bearer: wrong token"))
+                        .header(HeaderUtil.AUTH_HEADER, "Bearer: wrong token"))
                 .andExpect(status().isUnauthorized());
 
     }
@@ -170,24 +170,24 @@ public class SecurityControllerTest {
 
         var json = mapper.writeValueAsString(req);
 
-        mockMvc.perform(post("/security")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json));
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
 
-        var creds = req.login()+":"+req.password();
+        var creds = req.login() + ":" + req.password();
         var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
-        var res = mockMvc.perform(post("/security/login")
-                        .header("Authorization", "Basic "+new String(basicToken)))
+        var res = mockMvc.perform(post(EndpointUtil.SECURITY_PATH + EndpointUtil.LOGIN_PATH)
+                        .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX + new String(basicToken)))
                 .andReturn()
                 .getResponse();
 
-        var token = res.getHeader("Authorization");
+        var token = res.getHeader(HeaderUtil.AUTH_HEADER);
 
 
-        mockMvc.perform(get("/security")
+        mockMvc.perform(get(EndpointUtil.SECURITY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", token))
+                        .header(HeaderUtil.AUTH_HEADER, token))
                 .andExpect(status().isForbidden());
 
     }
@@ -198,23 +198,23 @@ public class SecurityControllerTest {
 
         var json = mapper.writeValueAsString(req);
 
-        mockMvc.perform(post("/security")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json));
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json));
 
-        var creds = req.login()+":"+req.password();
+        var creds = req.login() + ":" + req.password();
         var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
-        var res = mockMvc.perform(post("/security/login")
-                        .header("Authorization", "Basic "+new String(basicToken)))
+        var res = mockMvc.perform(post(EndpointUtil.SECURITY_PATH + EndpointUtil.LOGIN_PATH)
+                        .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX + new String(basicToken)))
                 .andReturn()
                 .getResponse();
 
-        var token = res.getHeader("Authorization");
+        var token = res.getHeader(HeaderUtil.AUTH_HEADER);
 
-        mockMvc.perform(get("/security/ultra")
+        mockMvc.perform(get(EndpointUtil.SECURITY_PATH + EndpointUtil.ULTRA_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", token))
+                        .header(HeaderUtil.AUTH_HEADER, token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is("Ultrasecret")));
 
@@ -226,27 +226,27 @@ public class SecurityControllerTest {
 
         var json = mapper.writeValueAsString(req);
 
-        var created = mockMvc.perform(post("/security")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
+        var created = mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
         var data = mapper.readValue(created, UserResponse.class);
 
-        var creds = req.login()+":"+req.password();
+        var creds = req.login() + ":" + req.password();
         var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
-        var res = mockMvc.perform(post("/security/login")
-                        .header("Authorization", "Basic "+new String(basicToken)))
+        var res = mockMvc.perform(post(EndpointUtil.SECURITY_PATH + EndpointUtil.LOGIN_PATH)
+                        .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX + new String(basicToken)))
                 .andReturn()
                 .getResponse();
 
-        var token = res.getHeader("Authorization");
+        var token = res.getHeader(HeaderUtil.AUTH_HEADER);
 
-        mockMvc.perform(delete("/security/" + data.id())
-                        .header("Authorization", token))
+        mockMvc.perform(delete(EndpointUtil.SECURITY_PATH+"/" + data.id())
+                        .header(HeaderUtil.AUTH_HEADER, token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is("User deleted")));
 
@@ -254,27 +254,27 @@ public class SecurityControllerTest {
 
     @Test
     public void testRefresh() throws Exception {
-        var req = new UserCreateRequest("test21", "test", List.of("user","admin"));
+        var req = new UserCreateRequest("test21", "test", List.of("user", "admin"));
 
         var json = mapper.writeValueAsString(req);
 
-        mockMvc.perform(post("/security")
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
 
-        var creds = req.login()+":"+req.password();
+        var creds = req.login() + ":" + req.password();
         var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
-        var res = mockMvc.perform(post("/security/login")
-                        .header("Authorization", "Basic "+new String(basicToken)))
+        var res = mockMvc.perform(post(EndpointUtil.SECURITY_PATH + EndpointUtil.LOGIN_PATH)
+                        .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX + new String(basicToken)))
                 .andReturn()
                 .getResponse();
 
-        var token = res.getHeader("Authorization");
+        var token = res.getHeader(HeaderUtil.AUTH_HEADER);
 
 
-        mockMvc.perform(post("/security/refresh")
-                        .header("Authorization", token))
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH+EndpointUtil.REFRESH_PATH)
+                        .header(HeaderUtil.AUTH_HEADER, token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", is("Token refreshed")));
     }

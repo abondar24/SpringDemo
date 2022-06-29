@@ -4,6 +4,8 @@ import com.nimbusds.jose.shaded.json.JSONObject;
 import org.abondar.experimental.springsecurity.model.UserOauthRequest;
 import org.abondar.experimental.springsecurity.service.JwtService;
 import org.abondar.experimental.springsecurity.service.UserService;
+import org.abondar.experimental.springsecurity.util.HeaderUtil;
+import org.abondar.experimental.springsecurity.util.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +45,12 @@ public class OauthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        var oauthHeader = request.getHeader("X-OAUTH-TOKEN");
+        var oauthHeader = request.getHeader(HeaderUtil.OAUTH_HEADER);
             if (oauthHeader != null ){
                 var accessToken=nimbusDecoder.decode(oauthHeader);
                 var claims = accessToken.getClaims();
 
-                var sub = (String)claims.get("sub");
+                var sub = (String)claims.get(JwtUtil.SUB_CLAIM);
                 var roles = extractRoles(claims);
 
                 var oauthRequest = new UserOauthRequest(sub,roles);
@@ -58,7 +60,7 @@ public class OauthFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(auth.get());
 
-                response.setHeader("Authorization", "Bearer " + jwt);
+                response.setHeader(HeaderUtil.AUTH_HEADER, HeaderUtil.BEARER_PREFIX + jwt);
                 response.setStatus(200);
 
             } else {
@@ -69,9 +71,9 @@ public class OauthFilter extends OncePerRequestFilter {
     }
 
     private List<String> extractRoles(Map<String,Object> claims){
-        var resourceAccess = (JSONObject) claims.get("resource_access");
-        var rolesObj = (JSONObject)resourceAccess.get("spring");
+        var resourceAccess = (JSONObject) claims.get(JwtUtil.RESOURCE_ACCESS_CLAIM);
+        var rolesObj = (JSONObject)resourceAccess.get(JwtUtil.SPRING_RESOURCE);
 
-        return  (List<String>) rolesObj.get("roles");
+        return  (List<String>) rolesObj.get(JwtUtil.ROLES_RESOURCE);
     }
 }

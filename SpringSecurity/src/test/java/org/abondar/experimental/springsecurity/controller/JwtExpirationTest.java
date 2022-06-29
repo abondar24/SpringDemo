@@ -2,6 +2,8 @@ package org.abondar.experimental.springsecurity.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.abondar.experimental.springsecurity.model.UserCreateRequest;
+import org.abondar.experimental.springsecurity.util.EndpointUtil;
+import org.abondar.experimental.springsecurity.util.HeaderUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +48,7 @@ public class JwtExpirationTest {
 
         var json = mapper.writeValueAsString(req);
 
-        mockMvc.perform(post("/security")
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
 
@@ -54,27 +56,27 @@ public class JwtExpirationTest {
         var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
         var resp =
-                mockMvc.perform(post("/security/login")
-                        .header("Authorization", "Basic "+new String(basicToken)))
-                                .andReturn()
-                                        .getResponse();
-        var token = resp.getHeader("Authorization");
+                mockMvc.perform(post(EndpointUtil.SECURITY_PATH + EndpointUtil.LOGIN_PATH)
+                                .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX + new String(basicToken)))
+                        .andReturn()
+                        .getResponse();
+        var token = resp.getHeader(HeaderUtil.AUTH_HEADER);
 
-        mockMvc.perform(get("/security")
+        mockMvc.perform(get(EndpointUtil.SECURITY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("Authorization", token))
+                        .header(HeaderUtil.AUTH_HEADER, token))
                 .andExpect(status().is(406));
 
     }
 
 
     @Test
-    public void testRefresh() throws Exception {
+    public void testRefreshExpired() throws Exception {
         var req = new UserCreateRequest("test", "test", List.of("user"));
 
         var json = mapper.writeValueAsString(req);
 
-        mockMvc.perform(post("/security")
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json));
 
@@ -82,19 +84,17 @@ public class JwtExpirationTest {
         var basicToken = Base64.getEncoder().encode(creds.getBytes());
 
         var resp =
-                mockMvc.perform(post("/security/login")
-                                .header("Authorization", "Basic "+new String(basicToken)))
+                mockMvc.perform(post(EndpointUtil.SECURITY_PATH + EndpointUtil.LOGIN_PATH)
+                                .header(HeaderUtil.AUTH_HEADER, HeaderUtil.BASIC_PREFIX+ new String(basicToken)))
                         .andReturn()
                         .getResponse();
-        System.out.println(resp.containsHeader("Authorization"));
-        var token = resp.getHeader("Authorization");
-        System.out.println(token);
+        var token = resp.getHeader(HeaderUtil.AUTH_HEADER);
 
 
-        mockMvc.perform(post("/security/refresh")
-                        .header("Authorization", token))
+        mockMvc.perform(post(EndpointUtil.SECURITY_PATH+EndpointUtil.REFRESH_PATH)
+                        .header(HeaderUtil.AUTH_HEADER, token))
                 .andExpect(status().isOk())
-                .andExpect(header().string("Authorization", containsString("Bearer ")))
+                .andExpect(header().string(HeaderUtil.AUTH_HEADER, containsString(HeaderUtil.BEARER_PREFIX)))
                 .andExpect(jsonPath("$", is("Token refreshed")));
 
     }

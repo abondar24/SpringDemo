@@ -1,6 +1,8 @@
 package org.abondar.experimental.springsecurity.controller;
 
 import com.nimbusds.jose.shaded.json.JSONObject;
+import org.abondar.experimental.springsecurity.util.EndpointUtil;
+import org.abondar.experimental.springsecurity.util.HeaderUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -53,11 +55,11 @@ public class OauthTest {
 
         when(nimbusDecoder.decode(testOauthToken)).thenReturn(accessToken);
 
-        mockMvc.perform(get("/security")
+        mockMvc.perform(get(EndpointUtil.SECURITY_PATH)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("X-OAUTH-TOKEN", testOauthToken))
+                        .header(HeaderUtil.OAUTH_HEADER, testOauthToken))
                 .andExpect(status().isOk())
-                .andExpect(header().string("Authorization", containsString("Bearer ")));
+                .andExpect(header().string(HeaderUtil.AUTH_HEADER, containsString(HeaderUtil.BEARER_PREFIX)));
 
     }
 
