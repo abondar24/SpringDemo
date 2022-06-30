@@ -16,7 +16,7 @@ Set of Spring 4-5 demos.
 - [SpringMVC](SpringMVC/README.md)
 - [SpringWS](SpringWS/README.md)
 - [SpringHazelcast](SpringHazelcast/README.md)
-
+- [SpringSecurity](SpringSecurity/README.md)
 
 
 

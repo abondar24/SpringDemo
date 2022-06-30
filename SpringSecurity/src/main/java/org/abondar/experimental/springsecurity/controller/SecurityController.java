@@ -76,6 +76,7 @@ public class SecurityController {
         return ResponseEntity.ok("Ultrasecret");
     }
 
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "User deleted")})
     @Operation(summary = "Delete existing user",security = { @SecurityRequirement(name = "bearer-key"),@SecurityRequirement(name = "oauth-key") })
     @DeleteMapping(path = EndpointUtil.ID_PATH)
     public ResponseEntity<String> deleteUser(@PathVariable String id) {
