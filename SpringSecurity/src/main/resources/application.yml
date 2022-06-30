@@ -15,3 +15,10 @@ jwt:
   audience: SecurityApp
   expTime: 36000
   refreshExp: 48000
+
+springdoc:
+  api-docs:
+    path: /docs
+  swagger-ui:
+    path: /swagger
+  show-actuator: true
